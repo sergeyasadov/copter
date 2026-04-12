@@ -15,14 +15,29 @@ typedef enum GPIO_Mode {
 } GPIO_Mode;
 
 
+typedef struct GPIO_Digital {
+    GPIO_State state;
+} GPIO_Digital;
+
+typedef struct GPIO_PWM {
+    
+} GPIO_PWM;
+
 typedef struct GPIO {
-    uint8_t PIN;
-    GPIO_State STATE;
-    GPIO_Mode MODE;
+    uint8_t pin;
+    GPIO_Mode mode;
+
+    GPIO_Digital Digital;
+    GPIO_PWM PWM;
 } GPIO;
 
+
+extern uint8_t GPIO_PIN_0;
 extern uint8_t GPIO_PIN_1;
 extern uint8_t GPIO_PIN_2;
+extern uint8_t GPIO_PIN_3;
+extern uint8_t GPIO_PIN_4;
+extern uint8_t GPIO_PIN_5;
 
 
 void GPIO_Init(GPIO*);
