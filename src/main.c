@@ -4,12 +4,12 @@
 
 
 int main(void) {
-    GPIO_Digital led0;
-    led0.pin = GPIO_PIN_0;
-    led0.dir = GPIO_DIR__OUTPUT;
-    led0.value = 1;
+    GPIO led0 = {
+        .pin = GPIO_PIN_0,
+        .dir = GPIO_DIR__OUTPUT
+    };
 
-    GPIO_Digital_Init(&led0);
+    GPIO_Init(&led0);
 
     // TCCR0A = _BV(COM0A1) | _BV(COM0B1) | _BV(WGM00) | _BV(WGM01);
     // TCCR0B = _BV(CS00);
@@ -26,9 +26,7 @@ int main(void) {
         //     delayMs(5);
         // }
 
-        led0.value = !GPIO_Digital_Read(&led0);
-        GPIO_Digital_Set(&led0);
-
-        delayMs(300);
+        GPIO_SetToggle(&led0);
+        delayMs(250);
     }
 }

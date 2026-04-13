@@ -4,7 +4,7 @@ SIZE    := avr-size
 AVRDUDE := avrdude
 
 PROGRAMMER   ?= usbasp
-PORT         ?= usb
+PORT         ?= 
 BAUD         ?=
 AVRDUDE_PART ?= t13
 

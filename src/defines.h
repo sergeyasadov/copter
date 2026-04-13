@@ -23,6 +23,11 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
+typedef uint8_t __gpio_value_t;
+typedef uint8_t __gpio_pin_t;
+typedef uint8_t __pwm_value_t;
+typedef uint8_t __pwm_duty_t;
+typedef uint8_t __pwm_freq_t;
 
 #ifndef delayMs
 #   define delayMs _delay_ms
