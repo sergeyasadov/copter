@@ -1,15 +1,21 @@
 #include "defines.h"
-#include "gpio.h"
+// #include "gpio.h"
+// #include "pwm.h"
 #include "utils.h"
 
 
 int main(void) {
-    GPIO led0 = {
-        .pin = GPIO_PIN_0,
-        .dir = GPIO_DIR__OUTPUT
-    };
+    // GPIO led0 = {
+    //     .pin = GPIO_PIN_0,
+    //     .dir = GPIO_DIR__OUTPUT
+    // };
 
-    GPIO_Init(&led0);
+    // PWM_Config_t pwm_cfg = {
+    //     .duty = 255,
+    //     .freq = 
+    // }
+
+    // GPIO_Init(&led0);
 
     // TCCR0A = _BV(COM0A1) | _BV(COM0B1) | _BV(WGM00) | _BV(WGM01);
     // TCCR0B = _BV(CS00);
@@ -26,7 +32,7 @@ int main(void) {
         //     delayMs(5);
         // }
 
-        GPIO_SetToggle(&led0);
+        // GPIO_SetToggle(&led0);
         delayMs(250);
     }
 }

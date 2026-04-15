@@ -1,3 +1,5 @@
 /.vscode
 /bin
 /build
+/CAD/DriverMotor/driver/driver-backups
+/CAD/DriverMotor/driver/.history

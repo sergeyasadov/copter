@@ -1,6 +1,6 @@
 PROJECT ?= copter
 ARCH    ?= avr
-MCU     ?= attiny13a
+MCU     ?= attiny44a
 F_CPU   ?= 4000000UL
 
 include path_defs.mk

@@ -3,22 +3,16 @@
 
 #include "defines.h"
 
-typedef enum GPIO_Dir_t {
+typedef enum GPIO_Dir {
     GPIO_DIR__INPUT,
     GPIO_DIR__OUTPUT
 } GPIO_Dir_t;
 
-typedef enum GPIO_Level_t {
+typedef enum GPIO_Level {
     GPIO_LEVEL__HIGH,
     GPIO_LEVEL__LOW
 } GPIO_Level_t;
 
-extern const uint8_t GPIO_PIN_0;
-extern const uint8_t GPIO_PIN_1;
-extern const uint8_t GPIO_PIN_2;
-extern const uint8_t GPIO_PIN_3;
-extern const uint8_t GPIO_PIN_4;
-extern const uint8_t GPIO_PIN_5;
 
 typedef __gpio_pin_t GPIO_Pin_t;
 typedef __gpio_value_t GPIO_Value_t;

@@ -1,0 +1,4 @@
+SRC_ARCH := 
+
+INC_ARCH := \
+	-I$(ARCH_MCU_DIR)
