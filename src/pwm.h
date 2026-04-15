@@ -2,6 +2,7 @@
 #define __COPTER_PWM_H__
 
 #include "defines.h"
+#include "gpio.h"
 
 typedef __pwm_duty_t  PWM_Duty_t;
 typedef __pwm_freq_t  PWM_Freq_t;
@@ -21,6 +22,7 @@ typedef enum PWM_Polar {
 } PWM_Polar_t;
 
 typedef struct PWM {
+    GPIO_t gpio;
     PWM_Duty_t duty; // hz
     PWM_Freq_t presceller; // 0 .. 1024
     PWM_Polar_t polar;

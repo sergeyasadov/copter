@@ -30,7 +30,7 @@ CPPFLAGS += \
 
 CFLAGS += \
 	-mmcu=$(MCU) \
-	-std=c11 \
+	-std=c99 \
 	-Os \
 	-Wall \
 	-Wextra \

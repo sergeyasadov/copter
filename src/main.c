@@ -1,19 +1,23 @@
 #include "defines.h"
-// #include "gpio.h"
-// #include "pwm.h"
+#include "gpio.h"
+#include "pwm.h"
 #include "utils.h"
 
 
 int main(void) {
-    // GPIO led0 = {
-    //     .pin = GPIO_PIN_0,
-    //     .dir = GPIO_DIR__OUTPUT
-    // };
+    GPIO_t led0 = {
+        .port = GPIO_PORT_PWM_MOTOR_1,
+        .pin = GPIO_PIN_PWM_MOTOR_1,
+        .dir = GPIO_DIR__OUTPUT
+    };
 
-    // PWM_Config_t pwm_cfg = {
-    //     .duty = 255,
-    //     .freq = 
-    // }
+    PWM_t motor1 = {
+        .gpio = led0,
+        .polar = PWM_POLAR_NORMAL,
+        .presceller = PWM_PRESCALER_1
+    };
+
+    PWM_Init(&motor1);
 
     // GPIO_Init(&led0);
 
