@@ -8,7 +8,9 @@
 /// AVR ///
 #ifdef __AVR_ARCH__
 
+#ifndef __AVR_ATtiny44A__
 #define __AVR_ATtiny44A__
+#endif
 
 #ifndef F_CPU
 #   define F_CPU D_FREQ_MCU

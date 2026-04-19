@@ -11,15 +11,15 @@ int main(void) {
         .dir = GPIO_DIR__OUTPUT
     };
 
-    PWM_t motor1 = {
-        .gpio = led0,
-        .polar = PWM_POLAR_NORMAL,
-        .presceller = PWM_PRESCALER_1
-    };
+    // PWM_t motor1 = {
+    //     .gpio = led0,
+    //     .polar = PWM_POLAR_NORMAL,
+    //     .presceller = PWM_PRESCALER_1
+    // };
 
-    PWM_Init(&motor1);
-
-    // GPIO_Init(&led0);
+    // PWM_Init(&motor1);
+    // DDRB |= _BV(PB2);
+    GPIO_Init(&led0);
 
     // TCCR0A = _BV(COM0A1) | _BV(COM0B1) | _BV(WGM00) | _BV(WGM01);
     // TCCR0B = _BV(CS00);
@@ -36,6 +36,8 @@ int main(void) {
         //     delayMs(5);
         // }
 
+        PORTB |= _BV(PB2);
+        // GPIO_SetHigh(&led0);
         // GPIO_SetToggle(&led0);
         delayMs(250);
     }
