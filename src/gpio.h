@@ -4,34 +4,35 @@
 #include "defines.h"
 
 typedef enum GPIO_Dir {
-    GPIO_DIR__INPUT,
-    GPIO_DIR__OUTPUT
-} GPIO_Dir_t;
+    GPIO_DIR_INPUT,
+    GPIO_DIR_INPUT_PULLUP,
+    GPIO_DIR_OUTPUT
+} GPIO_Dir;
 
 typedef enum GPIO_Level {
-    GPIO_LEVEL__HIGH,
-    GPIO_LEVEL__LOW
-} GPIO_Level_t;
+    GPIO_LEVEL_HIGH,
+    GPIO_LEVEL_LOW
+} GPIO_Level;
 
-
-typedef __gpio_pin_t GPIO_Pin_t;
-typedef __gpio_value_t GPIO_Value_t;
-typedef __gpio_port_t GPIO_Port_t;
+typedef enum GPIO_Port {
+    GPIO_PORT_A,
+    GPIO_PORT_B
+} GPIO_Port;
 
 typedef struct GPIO {
-    GPIO_Port_t port;
-    GPIO_Dir_t dir;
+    GPIO_Port port;
+    GPIO_Dir dir;
     GPIO_Pin_t pin;
 } GPIO_t;
 
 
 void GPIO_Init(GPIO_t*);
 
-void GPIO_SetDir(GPIO_t*, GPIO_Dir_t);
+void GPIO_SetDir(GPIO_t*, GPIO_Dir);
 
-void GPIO_Write(GPIO_t*, GPIO_Level_t);
+void GPIO_Write(GPIO_t*, GPIO_Level);
 
-GPIO_Level_t GPIO_Read(const GPIO_t*);
+GPIO_Level GPIO_Read(const GPIO_t*);
 
 void GPIO_SetHigh(GPIO_t*);
 

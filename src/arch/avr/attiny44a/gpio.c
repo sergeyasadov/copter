@@ -1,72 +1,82 @@
 #include "gpio.h"
 
 
-#define getReg(port, a, b) (((port == PORTA) ? (a) : (b)))
-#define getRegPort(port) getReg(port, PORTA, PORTB)
-#define getRegPin(port) getReg(port, PINA, PINB)
-#define getRegDir(port) getReg(port, DDRA, DDRB)
-
-
-/// INTERNAL
-
-static inline 
-__ATTR_ALWAYS_INLINE__ 
-void setBit(volatile uint8_t* r, uint8_t v) {
-    *r |= _BV(v);
-}
-
-
-// static inline 
-// __ATTR_ALWAYS_INLINE__
-// void clearBit(uint8_t r, uint8_t v) {
-//     _SFR_IO8(r) &= ~_BV(v);
-// }
-
+#define sbi(r, b) ((r) |= _BV(b))
+#define cbi(r, b) ((r) &= ~_BV(b))
 
 /// EXTERNAL
 
+const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_1 = PB2;
+const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_2 = PA7;
+const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_3 = PA6;
+const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_4 = PA5;
+
+const GPIO_Port_t GPIO_PORT_PWM_MOTOR_1 = GPIO_PORT_B;
+const GPIO_Port_t GPIO_PORT_PWM_MOTOR_2 = GPIO_PORT_A;
+const GPIO_Port_t GPIO_PORT_PWM_MOTOR_3 = GPIO_PORT_A;
+const GPIO_Port_t GPIO_PORT_PWM_MOTOR_4 = GPIO_PORT_A;
+
+
 void GPIO_Init(GPIO_t* gpio) {
     GPIO_SetDir(gpio, gpio->dir);
-    // GPIO_Write(gpio, GPIO_LEVEL__LOW);
+    GPIO_Write(gpio, GPIO_LEVEL_LOW);
 }
 
 
-// void GPIO_Write(GPIO_t* gpio, GPIO_Level_t level) {
-//     if(level == GPIO_LEVEL__HIGH) {
-//         setBit(getRegPort(gpio->port), gpio->pin);
-//     } 
-//     else {
-//         clearBit(getRegPort(gpio->port), gpio->pin);
-//     }
-// }
-
-
-// GPIO_Level_t GPIO_Read(const GPIO_t* gpio) {
-//     return getRegPin(gpio->port) & _BV(gpio->pin);
-// }
-
-
-void GPIO_SetDir(GPIO_t* gpio, GPIO_Dir_t ndir) {
+void GPIO_SetDir(GPIO_t* gpio, GPIO_Dir ndir) {
     gpio->dir = ndir;
-    if(gpio->dir == GPIO_DIR__OUTPUT) {
-        setBit((volatile uint8_t*)getRegDir(gpio->port), gpio->pin);
+    volatile uint8_t* reg = gpio->port == GPIO_PORT_A ? &DDRA : &DDRB;
+    switch (gpio->dir) {
+        case GPIO_DIR_OUTPUT : {
+            sbi(*reg, gpio->pin);
+            break;
+        }
+
+        case GPIO_DIR_INPUT_PULLUP : {
+            GPIO_SetHigh(gpio);
+        }
+
+        case GPIO_DIR_INPUT : {
+            cbi(*reg, gpio->pin);
+            break;
+        }
+
+        default: break;
     }
-    // else {
-    //     clearBit(getRegDir(gpio->port), gpio->pin);
-    // }
 }
 
 
-// void GPIO_SetHigh(GPIO_t* gpio) {
-//     setBit(getRegPort(gpio->port), gpio->pin);
-// }
+void GPIO_Write(GPIO_t* gpio, GPIO_Level level) {
+    volatile uint8_t* reg = gpio->port == GPIO_PORT_A ? &PORTA : &PORTB;
+    switch (level) {
+        case GPIO_LEVEL_HIGH : {
+            sbi(*reg, gpio->pin);
+            break;
+        }
+        case GPIO_LEVEL_LOW : {
+            cbi(*reg, gpio->pin);
+            break;
+        }  
+        default:
+            break;
+    }
+}
 
 
-// void GPIO_SetLow(GPIO_t* gpio) {
-//     clearBit(getRegPort(gpio->port), gpio->pin);
-// }
+GPIO_Level GPIO_Read(const GPIO_t* gpio) {
+    return ((gpio->port == GPIO_PORT_A ? PINA : PINB) & _BV(gpio->pin)) ? GPIO_LEVEL_LOW : GPIO_LEVEL_HIGH;
+}
+
+void GPIO_SetHigh(GPIO_t* gpio) {
+    GPIO_Write(gpio, GPIO_LEVEL_HIGH);
+}
 
 
-// void GPIO_SetToggle(GPIO_t* gpio) {
-//     GPIO_Write(gpio, GPIO_Read(gpio) == GPIO_LEVEL__LOW);
-// }
+void GPIO_SetLow(GPIO_t* gpio) {
+    GPIO_Write(gpio, GPIO_LEVEL_LOW);
+}
+
+
+void GPIO_SetToggle(GPIO_t* gpio) {
+    GPIO_Write(gpio, GPIO_Read(gpio) == GPIO_LEVEL_LOW);
+}

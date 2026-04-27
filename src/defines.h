@@ -2,7 +2,7 @@
 #define __COPTER_DEFINES_H__
 
 
-#define D_FREQ_MCU ((unsigned long)4e6)
+#define D_FREQ_MCU ((unsigned long)1e6)
 
 
 /// AVR ///
@@ -12,29 +12,20 @@
 #define __AVR_ATtiny44A__
 #endif
 
-#ifndef F_CPU
+#ifdef F_CPU
 #   define F_CPU D_FREQ_MCU
 #endif // F_CPU
 
 #include <avr/io.h>
 #include <util/delay.h>
 
-typedef uint8_t __gpio_value_t;
-typedef uint8_t __gpio_pin_t;
-typedef uint8_t __gpio_port_t; 
-typedef uint8_t __pwm_value_t;
-typedef uint8_t __pwm_duty_t;
-typedef uint8_t __pwm_freq_t;
+typedef uint8_t GPIO_Pin_t;
+typedef uint8_t GPIO_Value_t;
+typedef enum GPIO_Port GPIO_Port_t;
 
-#define GPIO_PIN_PWM_MOTOR_1 PB2 
-#define GPIO_PIN_PWM_MOTOR_2 PA7 
-#define GPIO_PIN_PWM_MOTOR_3 PA6
-#define GPIO_PIN_PWM_MOTOR_4 PA5
-
-#define GPIO_PORT_PWM_MOTOR_1 PORTB
-#define GPIO_PORT_PWM_MOTOR_2 PORTA
-#define GPIO_PORT_PWM_MOTOR_3 PORTA
-#define GPIO_PORT_PWM_MOTOR_4 PORTA
+typedef uint8_t  PWM_Duty_t;
+typedef uint8_t  PWM_Freq_t;
+typedef uint8_t  PWM_Value_t;
 
 #ifndef delayMs
 #   define delayMs _delay_ms
@@ -46,5 +37,18 @@ typedef uint8_t __pwm_freq_t;
 
 #endif //__AVR_ARCH__
 /// AVR ///
+
+
+extern const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_1; 
+extern const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_2; 
+extern const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_3;
+extern const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_4;
+
+extern const GPIO_Port_t GPIO_PORT_PWM_MOTOR_1; 
+extern const GPIO_Port_t GPIO_PORT_PWM_MOTOR_2; 
+extern const GPIO_Port_t GPIO_PORT_PWM_MOTOR_3;
+extern const GPIO_Port_t GPIO_PORT_PWM_MOTOR_4;
+
+
 
 #endif // __COPTER_DEFINES_H__
