@@ -28,5 +28,7 @@ void ADC_Init(ADC_t* adc) {
 
 
 uint16_t ADC_Read(ADC_t* adc) {
-    return (uint16_t)(ADC);
+    while(!(ADCSRA & _BV(ADSC)));
+    // return (uint16_t)((ADCH << 8) | ADCL);
+    return ADC;
 }

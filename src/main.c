@@ -3,6 +3,10 @@
 #include "pwm.h"
 #include "utils.h"
 #include "adc.h"
+#include "uart.h"
+
+#include <stdio.h>
+#include <avr/interrupt.h>
 
 
 int main(void) {
@@ -53,13 +57,33 @@ int main(void) {
             .prescaler = PWM_PRESCALER_1
         }
     };
-
-
     ARR_FOREACH(motors, i) {
         PWM_Init(&motors[i]);
     }
 
+    
+    UART_t uart = {
+        .tx = {
+            .port = GPIO_PORT_A,
+            .pin = PA1
+        },
+        .rx = {
+            .port = GPIO_PORT_A,
+            .pin = PA2
+        }
+    };
+
+    UART_Init(&uart);
+
+
     while(1) {
+        // ARR_FOREACH(str, i) {
+        //     UART_SendByte(&uart, (uint8_t)str[i]);
+        // }
+
+        delayMs(120);
+
+
         // for(uint8_t i = 0; i < 0xff; i++) {
         //     PWM_Set(&motor1, i);
         //     delayMs(5);
@@ -71,9 +95,9 @@ int main(void) {
 
         // OCR1A = ADC_Read(&pot) >> 2;
 
-        ARR_FOREACH(motors, i) {
-            PWM_Set(&motors[i], ADC_Read(&pot) >> 2);
-        }
+        // ARR_FOREACH(motors, i) {
+        //     PWM_Set(&motors[i], ADC_Read(&pot) >> 2);
+        // }
 
         // PWM_Set(&motor1, ADC_Read(&pot) >> 2);
     }
