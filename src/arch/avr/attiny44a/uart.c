@@ -46,7 +46,7 @@ void UART_Init(UART_t* uart) {
     *_UART0.TXPORT |= _UART0.TXMASK;
 }
 
-void UART_SendByte(UART_t* uart, uint8_t byte) {
+void UART_SendByte(uint8_t byte) {
     uart_tx_bit(0);
 
     for(register uint8_t i = 8; i; i--) {
@@ -58,82 +58,10 @@ void UART_SendByte(UART_t* uart, uint8_t byte) {
 }
 
 
-void UART_SendString(UART_t* uart, const char* str) {
+void UART_SendString(const char* str) {
     while(*str){
-        UART_SendByte(uart, (uint8_t)*str);
+        UART_SendByte((uint8_t)*str);
         str++;
     }
 }
 
-// void UART_Init(UART_t* uart) {
-//     // uart->rx.dir = GPIO_DIR_INPUT;
-//     // uart->tx.dir = GPIO_DIR_OUTPUT;
-//     // GPIO_Init(&uart->rx);
-//     // GPIO_Init(&uart->tx);
-//     // GPIO_SetHigh(&uart->tx);
-//     // GPIO_SetHigh(&uart->tx);
-
-//     _UART.RXDDR = (uart->tx.port == GPIO_PORT_A) ? &DDRA : &DDRB;
-//     _UART.RXPORT = (uart->tx.port == GPIO_PORT_A) ? &PORTA : &PORTB;
-//     _UART.RXMASK = _BV(uart->tx.pin);
-
-//     _UART.TXDDR = (uart->tx.port == GPIO_PORT_A) ? &DDRA : &DDRB;
-//     _UART.TXPORT = (uart->tx.port == GPIO_PORT_A) ? &PORTA : &PORTB;
-//     _UART.TXMASK = _BV(uart->tx.pin);
-    
-//     *_UART.RXDDR &= _UART.RXMASK;
-//     // *_UART.RXPORT |= _UART.RXMASK;
-
-//     *_UART.TXDDR |= _UART.TXMASK;
-//     *_UART.TXPORT |= _UART.TXMASK;
-    
-
-//     // *uart->tx.ddr |= uart->tx.mask;
-//     // uart_pinHigh(&uart->tx);
-
-//     // *uart->rx.ddr &= ~uart->rx.mask;
-//     // uart_pinHigh(&uart->rx);
-// }
-
-
-
-// void UART_SendByte(UART_t* uart, const uint8_t byte) {
-//     uint8_t sreg = SREG;
-//     cli();
-
-//     // PORTA &= ~_BV(PA1);
-//     *_UART.TXPORT &= ~_UART.TXMASK;
-//     // GPIO_SetLow(&uart->tx);
-//     // uart_pinLow(&uart->tx);
-//     // *uart->tx.port &= ~uart->tx.mask;
-//     // uart_delayBit();
-//     delayUs(UART_BIT_US);
-
-//     for(uint8_t i = 0; i < 8; i++) {
-//         if(byte & (1 << i)) {
-//             *_UART.TXPORT |= _UART.TXMASK;
-//             // PORTA |= _BV(PA1);
-//             // uart_pinHigh(&uart->tx);
-//             // *uart->tx.port |= uart->tx.mask;
-//         }
-//         else {
-//             *_UART.TXPORT &= ~_UART.TXMASK;
-//             // uart_pinLow(&uart->tx);
-//             // *uart->tx.port &= ~uart->tx.mask;
-//             // GPIO_SetLow(&uart->tx);
-//         }
-//         delayUs(UART_BIT_US);
-//         // uart_delayBit();
-//     }
-    
-//     *_UART.TXPORT |= _UART.TXMASK;
-//     // *uart->tx.port |= uart->tx.mask;
-//     // uart_pinHigh(&uart->tx);
-//     // PORTA |= _BV(PA1);
-//     // GPIO_SetHigh(&uart->tx);
-
-//     delayUs(UART_BIT_US);
-//     // uart_delayBit();
-
-//     SREG = sreg;
-// }

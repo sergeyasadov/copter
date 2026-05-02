@@ -4,9 +4,9 @@
 #include "defines.h"
 #include "gpio.h"
 
-#define UART_BAUD 4800
+#define UART_BAUD 9600
 #define UART_BIT_US ((double)((D_FREQ_MCU) / (UART_BAUD)))
-#define UART_DELAY_BIT_US() delayUs(UART_BIT_US)
+#define UART_DELAY_BIT_US() delayUs(91)
 #define UART_DELAY_HALF_BIT_US ((UART_BIT_US) / 2)
 
 
@@ -18,11 +18,11 @@ typedef struct UART {
 
 void UART_Init(UART_t*);
 
-void UART_SendByte(UART_t*, const uint8_t);
+void UART_SendByte(const uint8_t);
 
-void UART_SendString(UART_t*, const char*);
+void UART_SendString(const char*);
 
-uint8_t UART_ReadByte(UART_t*);
+uint8_t UART_ReadByte(void);
 
 
 #endif // __COPTER_UART_H__
