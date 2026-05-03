@@ -38,11 +38,22 @@ typedef uint8_t  PWM_Value_t;
 #endif //__AVR_ARCH__
 /// AVR ///
 
+extern const GPIO_Pin_t GPIO_PIN_TWI_SDA;
+extern const GPIO_Pin_t GPIO_PIN_TWI_SCL;
+
+extern const GPIO_Pin_t GPIO_PIN_UART_TX;
+extern const GPIO_Pin_t GPIO_PIN_UART_RX;
 
 extern const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_1; 
 extern const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_2; 
 extern const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_3;
 extern const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_4;
+
+extern const GPIO_Port_t GPIO_PORT_TWI_SDA;
+extern const GPIO_Port_t GPIO_PORT_TWI_SCL;
+
+extern const GPIO_Port_t GPIO_PORT_UART_RX;
+extern const GPIO_Port_t GPIO_PORT_UART_TX;
 
 extern const GPIO_Port_t GPIO_PORT_PWM_MOTOR_1; 
 extern const GPIO_Port_t GPIO_PORT_PWM_MOTOR_2; 

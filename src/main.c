@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "adc.h"
 #include "uart.h"
+#include "twi.h"
 
 #include <stdio.h>
 #include <avr/interrupt.h>
@@ -66,16 +67,29 @@ int main(void) {
     
     UART_t uart = {
         .tx = {
-            .port = GPIO_PORT_A,
-            .pin = PA1
+            .port = GPIO_PORT_UART_TX,
+            .pin = GPIO_PIN_UART_TX
         },
         .rx = {
-            .port = GPIO_PORT_A,
-            .pin = PA2
+            .port = GPIO_PORT_UART_RX,
+            .pin = GPIO_PIN_UART_RX
         }
     };
-
     UART_Init(&uart);
+
+
+    TWI_t twi = {
+        .sda = {
+            .port = GPIO_PORT_TWI_SDA,
+            .pin = GPIO_PIN_UART_TX
+        },
+        .scl = {
+            .port = GPIO_PORT_TWI_SCL,
+            .pin = GPIO_PIN_TWI_SCL
+        }
+    };
+    TWI_Init(&twi);
+    
 
     char str[32];
 
@@ -86,10 +100,12 @@ int main(void) {
 
         // register uint8_t res = ADC_Read(&pot) >> 2;
 
-        // sprintf(str, "%d\r\n", res);
+        
+        uint8_t twi_byte = TWI_ReadByte(0);
+        
+        sprintf(str, "%d\r\n", twi_byte);
 
-
-        // UART_SendString(str);
+        UART_SendString(str);
 
         delayMs(120);
 
