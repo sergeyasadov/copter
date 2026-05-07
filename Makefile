@@ -1,18 +1,14 @@
 PROJECT ?= copter
 ARCH    ?= avr
 MCU     ?= attiny44a
-F_CPU   ?= 
+F_CPU   ?= 1000000UL
 
-include path_defs.mk
+SRC_DIR   := src
 
-TARGET_DIR   := $(ARCH_DIR)/$(ARCH)
-ARCH_MCU_DIR := $(TARGET_DIR)/$(MCU)
+BIN_DIR   := bin
+BUILD_DIR := build
+OBJ_DIR   := $(BUILD_DIR)/obj
 
-ifeq ($(wildcard $(TARGET_DIR)/$(ARCH)_builder.mk),)
-$(error Unsupported target "$(ARCH)/$(MCU)". File "$(TARGET_DIR)/$(ARCH)_builder.mk" not found)
-endif
-
-include $(SRC_DIR)/sources.mk
-include $(TARGET_DIR)/$(MCU)/$(MCU)_sources.mk
-include $(TARGET_DIR)/$(ARCH)_tools.mk
-include $(TARGET_DIR)/$(ARCH)_builder.mk
+include ${SRC_DIR}/sources.mk
+include ${SRC_DIR}/tools.mk
+include ${SRC_DIR}/builder.mk
