@@ -15,6 +15,9 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
+#include <stdbool.h>
+
 
 #define SBIT(R, B) ((R) |= (B))
 #define CBIT(R, B) ((R) &= ~(B))

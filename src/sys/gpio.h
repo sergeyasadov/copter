@@ -16,5 +16,8 @@
 #define GPIO_SET_LOW(PORT, MASK) \
     CBIT(PORT, MASK)
 
+#define GPIO_READ(PIN, MASK) \
+    (PIN & MASK)
+
 
 #endif // __GPIO_H__

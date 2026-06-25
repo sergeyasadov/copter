@@ -1,10 +1,10 @@
-CC      := avr-gcc
-OBJCOPY := avr-objcopy
-SIZE    := avr-size
+CC      := $(CC_PATH)/avr-gcc
+OBJCOPY := $(CC_PATH)/avr-objcopy
+SIZE    := $(CC_PATH)/avr-size
 AVRDUDE := avrdude
 
 PROGRAMMER   ?= usbasp
-PORT         ?= 
+PORT         ?=
 BAUD         ?=
 AVRDUDE_PART ?= t44a
 
