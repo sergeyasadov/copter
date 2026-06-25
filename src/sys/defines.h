@@ -3,7 +3,7 @@
 
 #include "utils.h"
 
-#define D_FREQ_MCU ((unsigned long)1e6)
+#define D_FREQ_MCU ((unsigned long)20e6)
 
 #ifndef __AVR_ATtiny44A__
 #define __AVR_ATtiny44A__
@@ -15,6 +15,7 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <util/atomic.h>
 #include <avr/interrupt.h>
 #include <stdbool.h>
 
