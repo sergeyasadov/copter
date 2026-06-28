@@ -1,12 +1,10 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
-#include "utils.h"
-
 #define D_FREQ_MCU ((unsigned long)20e6)
 
 #ifndef __AVR_ATtiny44A__
-#define __AVR_ATtiny44A__
+#   define __AVR_ATtiny44A__
 #endif
 
 #ifndef F_CPU

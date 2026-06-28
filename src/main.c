@@ -2,37 +2,39 @@
 #include "sys/uart.h"
 #include "flight/motor.h"
 #include "flight/sbus.h"
+#include "util/atomic.h"
+#include "util/delay.h"
 
 
 int main(void) {
-    UART_Init();
-    _delay_ms(400);
-    UART_Print("UART Init\r\n");
 
-    SBUS_Init();
-    UART_Print("SBUS Init\r\n");
+    UART_Init();
+    _delay_ms(10);
 
     Motor_Init();
-    UART_Print("Motor Init\r\n");
+    UART_Print("Init\n\r");
+    _delay_ms(10);
 
+    SBUS_Init();
+    _delay_ms(10);
     sei();
 
 
     while (1) {
-        if (SBUS_Available()) {
+        if (__sbus_new_frame) {
             ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-                uint16_t sbus_ch_copy[SBUS_NUM_CHANNELS];
-                for (uint8_t i = 0; i < SBUS_NUM_CHANNELS; i++) {
-                    sbus_ch_copy[i] = __sbus_channels[i];
-                }
-                uint8_t flags_copy = __sbus_flags;
-                SBUS_Reset();
-
-                MOTOR_SET(1, SBUS_ToPWM(sbus_ch_copy[2]));
-                MOTOR_SET(2, SBUS_ToPWM(sbus_ch_copy[1]));
+                SBUS_Filter();
+                __sbus_new_frame = false;
+                // UART_PrintDec(SBUS_ToPWM(SBUS_GetFilteredValue(0), 19, 200));
+                // UART_PrintDec(SBUS_ToPWM(SBUS_GetFilteredValue(1), 20, 201));
+                // UART_PrintDec(SBUS_ToPWM(SBUS_GetFilteredValue(2), 19, 201));
+                // UART_PrintDec(SBUS_ToPWM(SBUS_GetFilteredValue(3), 20, 200));
+                UART_Print("\n\r");
             }
         }
     }
+
+
 
     return 0;
 }

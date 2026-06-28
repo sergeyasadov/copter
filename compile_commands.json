@@ -1,26 +1,28 @@
 [
-  {
-    "directory": "/Users/cogitary/Desktop/copter",
-    "arguments": [
-      "/Users/cogitary/Desktop/Devs/COMPILERS/avr8-toolchain/bin/avr-gcc",
-      "-Isrc",
-      "-Isrc/sys",
-      "-I/Users/cogitary/Desktop/Devs/COMPILERS/avr8-toolchain/avr/include",
-      "-DF_CPU=1000000UL",
-      "-std=c99",
-      "-Os",
-      "-Wall",
-      "-Wextra",
-      "-Wpedantic",
-      "-ffunction-sections",
-      "-fdata-sections",
-      "-MMD",
-      "-MP",
-      "-c",
-      "src/main.c",
-      "-o",
-      "build/obj/main.o"
-    ],
-    "file": "src/main.c"
-  }
+ {
+  "directory": "/Users/cogitary/Desktop/copter",
+  "arguments": [
+   "/Users/cogitary/Desktop/Devs/COMPILERS/avr8-toolchain/bin/avr-gcc",
+   "-Isrc",
+   "-Isrc/sys",
+   "-Isrc/flight",
+   "-I/Users/cogitary/Desktop/Devs/COMPILERS/avr8-toolchain/avr/include",
+   "-DF_CPU=20000000UL",
+   "-mmcu=attiny44a",
+   "-std=c99",
+   "-Os",
+   "-Wall",
+   "-Wextra",
+   "-Wpedantic",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-MMD",
+   "-MP",
+   "-c",
+   "src/main.c",
+   "-o",
+   "build/obj/main.o"
+  ],
+  "file": "src/main.c"
+ }
 ]
