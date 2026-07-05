@@ -117,6 +117,13 @@ static __inline__ int8_t SBUS_ToPWM(uint16_t sbus, const uint8_t min, const uint
 }
 
 
+static __inline__ uint8_t SBUS_ToPWM_U8(uint16_t sbus, const uint8_t min, const uint16_t max) {
+    if (sbus < min)  sbus = min;
+    if (sbus > max) sbus = max;
+    return (uint8_t)(((uint32_t)(sbus - min) * 255 / (max - min)));
+}
+
+
 static __inline__ uint16_t SBUS_GetValue(uint8_t ch) {
     return __sbus_channels[ch];
 }

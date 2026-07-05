@@ -1,7 +1,7 @@
 PROJECT ?= copter
 ARCH    ?= avr
 MCU     ?= attiny44a
-F_CPU   ?= 20000000UL
+F_CPU   ?= 8000000UL
 
 SRC_DIR   := src
 

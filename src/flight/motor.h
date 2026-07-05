@@ -21,10 +21,15 @@
 #define MOTOR3_VALUE OCR1A
 #define MOTOR4_VALUE OCR1B
 
-#define MOTOR_SET(N, Val) (MOTOR##N##_VALUE =  (255 - Val))
+#define MOTOR_SET(N, Val) (MOTOR##N##_VALUE =  (Val))
 
 
 static __inline__ void Motor_Init(void) {
+    MOTOR1_VALUE = 0;
+    MOTOR2_VALUE = 0;
+    MOTOR3_VALUE = 0;
+    MOTOR4_VALUE = 0;
+
     SBIT(MOTOR1_DDR, MOTOR1_MASK);
     SBIT(MOTOR2_DDR, MOTOR2_MASK);
     SBIT(MOTOR3_DDR, MOTOR3_MASK);
@@ -34,22 +39,17 @@ static __inline__ void Motor_Init(void) {
     SBIT(TCCR0B, (1 << CS00));
     SBIT(TCCR0A,
         (1 << WGM00)  | (1 << WGM01)  |
-        (1 << COM0A1) | (1 << COM0A0) |
-        (1 << COM0B1) | (1 << COM0B0)
+        (1 << COM0A1) |
+        (1 << COM0B1)
     );
 
     // T1
     SBIT(TCCR1B, (1 << WGM12) | (1 << CS10));
     SBIT(TCCR1A,
         (1 << WGM10)  |
-        (1 << COM1A1) | (1 << COM1A0) |
-        (1 << COM1B1) | (1 << COM1B0)
+        (1 << COM1A1) |
+        (1 << COM1B1)
     );
-
-    MOTOR_SET(1, 0);
-    MOTOR_SET(2, 0);
-    MOTOR_SET(3, 0);
-    MOTOR_SET(4, 0);
 }
 
 #endif // __MOTOR_H__
