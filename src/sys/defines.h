@@ -22,6 +22,10 @@
 #define CBIT(R, B) ((R) &= ~(B))
 #define TBIT(R, B) ((R) ^= (B))
 
+#define SMBIT(R, B) (SBIT(R, ((1u) << (B))))
+#define CMBIT(R, B) (CBIT(R, ((1u) << (B))))
+#define TMBIT(R, B) (TBIT(R, ((1u) << (B))))
+
 #define TWI_MASK_SDA (1 << PB1)
 #define TWI_MASK_SCL (1 << PB0)
 #define TWI_PORT_SDA PORTB

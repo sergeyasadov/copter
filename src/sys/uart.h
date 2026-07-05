@@ -10,15 +10,26 @@
 #define UART_PORT_TX PORTA
 #define UART_DDR_TX DDRA
 
-#define UART_DELAY_BIT_US() _delay_us(26)
+#define UART_MASK_RX (1 << UART_BIT)
+#define UART_PORT_RX PORTA
+#define UART_DDR_RX DDRA
+
+#define UART_DELAY_BIT_US() _delay_us(104)
 
 
-static __inline__ void UART_Init(void) {
+static __inline__ void UART_TX_Init(void) {
     GPIO_SET_OUTPUT(UART_DDR_TX, UART_MASK_TX);
     GPIO_SET_HIGH(UART_PORT_TX, UART_MASK_TX);
 }
 
-static __inline__ void UART_PutChar(char c) {
+
+static __inline__ void UART_RX_Init(void) {
+    GPIO_SET_INPUT(UART_DDR_RX, UART_MASK_RX);
+    GPIO_SET_HIGH(UART_PORT_RX, UART_MASK_RX);
+}
+
+
+static __inline__ void UART_SendByte(uint8_t c) {
     GPIO_SET_LOW(UART_PORT_TX, UART_MASK_TX);
     UART_DELAY_BIT_US();
 
@@ -34,41 +45,17 @@ static __inline__ void UART_PutChar(char c) {
     UART_DELAY_BIT_US();
 }
 
-static __inline__ void UART_Print(const char *s) {
-    while(*s) {
-        UART_PutChar(*s++);
+
+static __inline__ uint8_t UART_GetByte(void) {
+    uint8_t c = 0;
+    for(register uint8_t i = 0; i < 8; i++) {
+        UART_DELAY_BIT_US();
+        if(GPIO_READ(PINA, UART_MASK_RX))
+            c |= (1 << i);
     }
-}
-
-static __inline__ void UART_PrintDec(uint16_t n) {
-    char buf[7];
-    uint8_t i = 6;
-    buf[i] = '\0';
-    if(n == 0) {
-        buf[--i] = '0';
-    } else {
-        while(n) {
-            buf[--i] = '0' + (n % 10);
-            n /= 10;
-        }
-    }
-    UART_Print(&buf[i]);
+    return c;
 }
 
 
-
-static __inline__ void UART_PutHexNibble(uint8_t nibble) {
-    nibble &= 0x0F;
-    if (nibble < 10) {
-        UART_PutChar('0' + nibble);
-    } else {
-        UART_PutChar('A' + (nibble - 10));
-    }
-}
-
-static __inline__ void UART_PrintHex8(uint8_t b) {
-    UART_PutHexNibble(b >> 4);
-    UART_PutHexNibble(b);
-}
 
 #endif // __UART_H__

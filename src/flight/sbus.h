@@ -101,19 +101,26 @@ static __inline__ uint16_t SBUS_GetFilteredValue(uint8_t ch) {
     return __sbus_filtered[ch];
 }
 
-#define SBUS_VALUE_MAX 200
-#define SBUS_VALUE_MIN 19
+static __inline__ bool SBUS_Available(void) {
+    return __sbus_new_frame;
+}
 
-static __inline__ uint8_t SBUS_ToPWM(uint16_t sbus, const uint8_t min, const uint16_t max) {
+static __inline__ void SBUS_Update(void) {
+    __sbus_new_frame = false;
+}
+
+
+static __inline__ int8_t SBUS_ToPWM(uint16_t sbus, const uint8_t min, const uint16_t max) {
     if (sbus < min)  sbus = min;
     if (sbus > max) sbus = max;
-    return (uint8_t)((uint32_t)(sbus - min) * 255 / (max - min));
+    return (uint8_t)(((uint32_t)(sbus - min) * 255 / (max - min)) - 128);
 }
 
 
 static __inline__ uint16_t SBUS_GetValue(uint8_t ch) {
     return __sbus_channels[ch];
 }
+
 
 
 ISR(PCINT0_vect) {
@@ -182,9 +189,6 @@ ISR(TIM1_COMPA_vect) {
 
                 if (__sbus_frame_index == 25) {
                     if (__sbus_frame_buf[0] == 0x0F) {
-                        for (uint8_t i = 0; i < 25; i++) {
-                            __sbus_debug_buf[i] = __sbus_frame_buf[i];
-                        }
                         SBUS_Decode(__sbus_frame_buf);
                         __sbus_new_frame = true;
                     }
