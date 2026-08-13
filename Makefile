@@ -1,7 +1,14 @@
 PROJECT ?= copter
 ARCH    ?= avr
 MCU     ?= attiny44a
-F_CPU   ?= 8000000UL
+F_CPU   ?=
+TYPE 	?= rx
+
+ifeq ($(TYPE), tx)
+	F_CPU = 20000000UL
+else
+	F_CPU = 8000000UL
+endif
 
 SRC_DIR   := src
 
