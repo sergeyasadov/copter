@@ -1,6 +1,7 @@
 #ifndef __MOTOR_H__
 #define __MOTOR_H__
 
+#include "gpio.h"
 #include "sys/defines.h"
 
 #define MOTOR1_MASK (1 << PB2)
@@ -21,7 +22,7 @@
 #define MOTOR3_VALUE OCR1A
 #define MOTOR4_VALUE OCR1B
 
-#define MOTOR_SET(N, Val) (MOTOR##N##_VALUE =  (Val))
+#define MOTOR_SET(N, Val) (MOTOR##N##_VALUE = (Val))
 
 
 static __inline__ void Motor_Init(void) {
@@ -30,10 +31,10 @@ static __inline__ void Motor_Init(void) {
     MOTOR3_VALUE = 0;
     MOTOR4_VALUE = 0;
 
-    SBIT(MOTOR1_DDR, MOTOR1_MASK);
-    SBIT(MOTOR2_DDR, MOTOR2_MASK);
-    SBIT(MOTOR3_DDR, MOTOR3_MASK);
-    SBIT(MOTOR4_DDR, MOTOR4_MASK);
+    GPIO_SET_OUTPUT(MOTOR1_DDR, MOTOR1_MASK);
+    GPIO_SET_OUTPUT(MOTOR2_DDR, MOTOR2_MASK);
+    GPIO_SET_OUTPUT(MOTOR3_DDR, MOTOR3_MASK);
+    GPIO_SET_OUTPUT(MOTOR4_DDR, MOTOR4_MASK);
 
     // T0
     SBIT(TCCR0B, (1 << CS00));

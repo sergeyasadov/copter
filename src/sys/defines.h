@@ -1,21 +1,15 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
-#define D_FREQ_MCU ((unsigned long)20e6)
-
 #ifndef __AVR_ATtiny44A__
 #   define __AVR_ATtiny44A__
 #endif
 
-#ifndef F_CPU
-#   define F_CPU D_FREQ_MCU
-#endif // F_CPU
 
 #include <avr/io.h>
 #include <util/delay.h>
 #include <util/atomic.h>
 #include <avr/interrupt.h>
-#include <stdbool.h>
 
 
 #define SBIT(R, B) ((R) |= (B))
@@ -32,8 +26,6 @@
 #define TWI_PORT_SCL PORTB
 #define TWI_DDR_SDA DDRB
 #define TWI_DDR_SCL DDRB
-
-
 
 
 #endif // __DEFINES_H__

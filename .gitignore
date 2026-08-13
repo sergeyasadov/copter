@@ -3,5 +3,5 @@
 /build
 /CAD/DriverMotor/driver/driver-backups
 /CAD/DriverMotor/driver/.history
-/.cache
 compile_commands.json
+/.cache

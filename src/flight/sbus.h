@@ -3,21 +3,24 @@
 
 #include "defines.h"
 #include "sys/gpio.h"
-#include "util/delay.h"
+#include "sys/utils.h"
 
 #define SBUS_DDR DDRA
 #define SBUS_PORT PORTA
 #define SBUS_PIN PINA
 #define SBUS_BIT PA1
-#define SBUS_PIN_MASK (1 << SBUS_BIT)
+#define SBUS_BIT_MASK (1 << SBUS_BIT)
 #define SBUS_NUM_CHANNELS 16
 
 #define SBUS_OCR_HALF_BIT  99
 #define SBUS_OCR_FULL_BIT  199
 
+#define SBUS_COUNT_CHANNELS 4
+
 #define SBUS_TIMEOUT 412 // 25 * 11 (*1.5)
 
 #define SBUS_FILTER_EMA 3 // 1..4
+
 
 enum sbus_state_t {
     SBUS_STATE_WAIT_FALLING = 0,
@@ -25,8 +28,9 @@ enum sbus_state_t {
     SBUS_STATE_RECEIVING
 };
 
+
 static volatile uint16_t __sbus_channels[SBUS_NUM_CHANNELS];
-static volatile bool __sbus_new_frame = false;
+static volatile uint8_t __sbus_new_frame = 0;
 static uint8_t __sbus_state;
 static uint8_t __sbus_flags;
 static uint8_t __sbus_current_byte;
@@ -40,15 +44,16 @@ static uint8_t __sbus_debug_buf[25];
 
 static uint16_t __sbus_filtered[SBUS_NUM_CHANNELS];
 
+
 static __inline__ void SBUS_Init(void) {
-    SBUS_DDR  &= ~SBUS_PIN_MASK;
-    SBUS_PORT |=  SBUS_PIN_MASK;
+    GPIO_SET_INPUT(SBUS_DDR, SBUS_BIT_MASK);
+    GPIO_SET_HIGH(SBUS_PORT, SBUS_BIT_MASK);
 
     _delay_ms(10);
 
-    GIFR   |= (1 << PCIF0);
-    PCMSK0 |= (1 << PCINT1);
-    GIMSK  |= (1 << PCIE0);
+    SMBIT(GIFR, PCIF0);
+    SMBIT(PCMSK0, PCINT1);
+    SMBIT(GIMSK, PCIE0);
 
     __sbus_state       = SBUS_STATE_WAIT_FALLING;
     __sbus_frame_index = -1;
@@ -78,63 +83,63 @@ static __inline__ void SBUS_Decode(const uint8_t *buf) {
 
 static __inline__ void SBUS_Reset(void) {
     TCCR1B = 0;
-    TIMSK1 &= ~(1 << OCIE1A);
+    CMBIT(TIMSK1, OCIE1A);
+
     __sbus_state       = SBUS_STATE_WAIT_FALLING;
     __sbus_frame_index = -1;
     __sbus_bit_pos     = 0;
     __sbus_current_byte = 0;
 
-    GIFR   |= (1 << PCIF0);
-    PCMSK0 |= (1 << PCINT1);
+    SMBIT(GIFR, PCIF0);
+    SMBIT(PCMSK0, PCINT1);
 }
 
 
 static __inline__ void SBUS_Filter(void) {
-    for(uint8_t i = 0; i < 4 /*SBUS_NUM_CHANNELS*/; i++) {
+    for(uint8_t i = 0; i < SBUS_COUNT_CHANNELS; i++) {
         const uint16_t raw = __sbus_channels[i];
         __sbus_filtered[i] = (int16_t)(raw - __sbus_filtered[i]) >> SBUS_FILTER_EMA;
     }
 }
 
 
-static __inline__ uint16_t SBUS_GetFilteredValue(uint8_t ch) {
+static __inline__ __attribute__((always_inline)) uint16_t SBUS_GetFilteredValue(uint8_t ch) {
     return __sbus_filtered[ch];
 }
 
-static __inline__ bool SBUS_Available(void) {
+
+static __inline__ __attribute__((always_inline)) uint8_t SBUS_Available(void) {
     return __sbus_new_frame;
 }
 
-static __inline__ void SBUS_Update(void) {
-    __sbus_new_frame = false;
+
+static __inline__ __attribute__((always_inline)) void SBUS_Update(void) {
+    __sbus_new_frame = 0;
 }
 
 
-static __inline__ int8_t SBUS_ToPWM(uint16_t sbus, const uint8_t min, const uint16_t max) {
-    if (sbus < min)  sbus = min;
-    if (sbus > max) sbus = max;
+static __inline__ __attribute__((always_inline)) uint16_t SBUS_GetValue(uint8_t ch) {
+    return __sbus_channels[ch];
+}
+
+
+static __inline__ int8_t SBUS_ToPWM_Centered(uint16_t sbus, const uint8_t min, const uint16_t max) {
+    sbus = CLAMP(sbus, min, max);
     return (uint8_t)(((uint32_t)(sbus - min) * 255 / (max - min)) - 128);
 }
 
 
-static __inline__ uint8_t SBUS_ToPWM_U8(uint16_t sbus, const uint8_t min, const uint16_t max) {
-    if (sbus < min)  sbus = min;
-    if (sbus > max) sbus = max;
+static __inline__ uint8_t SBUS_ToPWM_Uncentered(uint16_t sbus, const uint8_t min, const uint16_t max) {
+    sbus = CLAMP(sbus, min, max);
     return (uint8_t)(((uint32_t)(sbus - min) * 255 / (max - min)));
 }
-
-
-static __inline__ uint16_t SBUS_GetValue(uint8_t ch) {
-    return __sbus_channels[ch];
-}
-
 
 
 ISR(PCINT0_vect) {
     if (!(PCMSK0 & (1 << PCINT1))) return;
     if (__sbus_state != SBUS_STATE_WAIT_FALLING) return;
 
-    uint8_t pin = (SBUS_PIN >> SBUS_BIT) & 1;
+    const uint8_t pin = (SBUS_PIN >> SBUS_BIT) & 1;
     if (pin != 0) return;
 
     PCMSK0 &= ~(1 << PCINT1);
@@ -197,7 +202,7 @@ ISR(TIM1_COMPA_vect) {
                 if (__sbus_frame_index == 25) {
                     if (__sbus_frame_buf[0] == 0x0F) {
                         SBUS_Decode(__sbus_frame_buf);
-                        __sbus_new_frame = true;
+                        __sbus_new_frame = 1;
                     }
                     SBUS_Reset();
                     return;
@@ -215,7 +220,9 @@ ISR(TIM1_COMPA_vect) {
         __sbus_current_byte = 0;
         __sbus_bit_pos = 1;
         __sbus_timeout_count++;
-        if (__sbus_timeout_count >= SBUS_TIMEOUT) { SBUS_Reset(); }
+        if (__sbus_timeout_count >= SBUS_TIMEOUT) {
+            SBUS_Reset();
+        }
         return;
     }
 
