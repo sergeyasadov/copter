@@ -38,28 +38,59 @@ INCLUDE_FLAGS += -I$(STM32F1_CMSIS_PATH)
 #ARCH FLAGS
 ARCH_FLAGS := -mcpu=cortex-m3
 ARCH_FLAGS += -mthumb
-# ARCH_FLAGS += -mfloat-abi=softfp
-# ARCH_FLAGS += -mfpu=fpv4-sp-d16
 
 DEPFLAGS := -MMD -MP
 
+COMPILERFLAGS := -O2
+COMPILERFLAGS += -Wall
+COMPILERFLAGS += -Wextra
+# COMPILERFLAGS += -Wpedantic
+COMPILERFLAGS += -Werror
+COMPILERFLAGS += -ffunction-sections
+COMPILERFLAGS += -fdata-sections
+COMPILERFLAGS += -ffreestanding
+COMPILERFLAGS += -Wconversion
+COMPILERFLAGS += -Wsign-conversion
+COMPILERFLAGS += -Warith-conversion
+COMPILERFLAGS += -Wdouble-promotion
+COMPILERFLAGS += -Wfloat-conversion
+COMPILERFLAGS += -Wenum-conversion
+COMPILERFLAGS += -Wlogical-op
+COMPILERFLAGS += -Wduplicated-cond
+COMPILERFLAGS += -Wduplicated-branches
+COMPILERFLAGS += -Wjump-misses-init
+COMPILERFLAGS += -Winfinite-recursion
+COMPILERFLAGS += -Wstrict-prototypes
+COMPILERFLAGS += -Wbad-function-cast
+COMPILERFLAGS += -Wcast-function-type
+COMPILERFLAGS += -Wcast-align=strict
+COMPILERFLAGS += -Wcast-qual
+COMPILERFLAGS += -Wpointer-arith
+COMPILERFLAGS += -Wvla
+COMPILERFLAGS += -Walloca
+COMPILERFLAGS += -fstack-usage
+COMPILERFLAGS += -Wstack-usage=256
+COMPILERFLAGS += -Warray-bounds=2
+COMPILERFLAGS += -Warray-parameter=2
+COMPILERFLAGS += -Wnull-dereference
+COMPILERFLAGS += -Wreturn-local-addr
+COMPILERFLAGS += -Wshift-overflow=2
+COMPILERFLAGS += -Wshift-negative-value
+COMPILERFLAGS += -Wanalyzer-too-complex
+COMPILERFLAGS += -Wanalyzer-symbol-too-complex
+
 CXXFLAGS := -std=c++23
-CXXFLAGS += $(ARCH_FLAGS)
-CXXFLAGS += -O3
-CXXFLAGS += -Wall
-CXXFLAGS += -Wextra
-# CXXFLAGS += -Werror
 CXXFLAGS += -fno-exceptions
 CXXFLAGS += -fno-rtti
+CXXFLAGS += $(ARCH_FLAGS)
+CXXFLAGS += $(COMPILERFLAGS)
 CXXFLAGS += $(DEFINES)
 CXXFLAGS += $(DEPFLAGS)
 CXXFLAGS += $(INCLUDE_FLAGS)
 
 CFLAGS := -std=c99
 CFLAGS += $(ARCH_FLAGS)
-CFLAGS += -O3
-CFLAGS += -Wall
-CFLAGS += -Wextra
+CFLAGS += $(COMPILERFLAGS)
 CFLAGS += $(DEFINES)
 CFLAGS += $(DEPFLAGS)
 CFLAGS += $(INCLUDE_FLAGS)
@@ -68,11 +99,16 @@ LDFLAGS := -T $(LDSCRIPT)
 LDFLAGS += -Wl,--gc-sections
 LDFLAGS += -specs=nosys.specs
 LDFLAGS += -specs=nano.specs
+LDFLAGS += -Wl,--print-memory-usage
+LDFLAGS += -Wl,-Map=firmware.map,--cref
+
 
 # FILES
-SOURCES := $(wildcard $(SOURCE_PATH)/*.cpp)
-OBJECTS := $(patsubst $(SOURCE_PATH)/%.cpp, $(BUILD_PATH)/%.o, $(SOURCES))
-DEPS := $(OBJECTS:.o=.d) $(OBJ_SYSTEM_FILE:.o=.d)
+SOURCES := $(shell find $(SOURCE_PATH) -name '*.c')
+OBJECTS := $(patsubst $(SOURCE_PATH)/%.c, $(BUILD_PATH)/%.o, $(SOURCES))
+DEPS := $(OBJECTS:.o=.d) $(NEEDED_OBJ_FILES:.o=.d)
+
+all: $(BIN_PATH)/$(MAIN_FILE).bin
 
 $(BIN_PATH)/$(MAIN_FILE).bin: $(BUILD_PATH)/$(MAIN_FILE).elf
 	@mkdir -p $(BIN_PATH)
@@ -89,9 +125,13 @@ $(BUILD_PATH)/$(OBJ_SYSTEM_FILE): $(SRC_SYSTEM_FILE)
 	@mkdir -p $(BUILD_PATH)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(BUILD_PATH)/%.o: $(SOURCE_PATH)/%.cpp
-	@mkdir -p $(BUILD_PATH)
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+$(BUILD_PATH)/%.o: $(SOURCE_PATH)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# $(BUILD_PATH)/%.o: $(SOURCE_PATH)/%.cpp
+# 	@mkdir -p $(BUILD_PATH)
+# 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 -include $(DEPS)
 
