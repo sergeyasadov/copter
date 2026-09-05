@@ -1,0 +1,10 @@
+#ifndef LOGGER_H
+#define LOGGER_H
+
+enum LOG_LEVEL {
+    LOG_LEVEL_OK = 0,
+    LOG_LEVEL_ERROR,
+    LOG_LEVEL_EXCEPTION
+};
+
+#endif // LOGGER_H

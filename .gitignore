@@ -10,3 +10,4 @@ compile_commands.json
 .clangd
 ._clangd
 src/_old/
+firmware.map
