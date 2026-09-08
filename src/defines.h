@@ -9,7 +9,7 @@
 #define DL1_SIGNAL 4u //PB4
 #define DL2_EXCEPTION 5u //PB5
 //========================================================================================
-// ELRS (UART1) [Not sync]
+// ELRS [CRSF] (UART1) [Not sync]
 // Async 420'000 bits/s ~ 420'000 baud
 // 8 bits, no parity, 1 stop bit
 // Interrupt-driven

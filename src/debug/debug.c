@@ -3,13 +3,13 @@
 #include "_debug_led_power.c"
 #include "_debug_led_signal.c"
 #include "_debug_led_exception.c"
-#include "_debug_uart.c"
 #include "_debug_logger.c"
+#include "_debug_usart.c"
 #include "logger.h"
 
 
 void debug_init(void) {
-    _debug_uart_init();
+    USART2_Init();
     _debug_logger(LOG_LEVEL_OK, "Debug UART init");
 
     _dl_power_init();

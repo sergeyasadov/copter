@@ -1,6 +1,7 @@
 #include "../defines.h"
 #include "logger.h"
-#include "_debug_uart_tx.c"
+
+#include "_debug_usart_tx.c"
 
 #include <stdarg.h>
 
@@ -34,11 +35,12 @@
 #define DEBUG_LOG_EXC_PREFIX       DEBUG_LOG_TEMPLATE_EXC     DEBUG_LOG_TEMPLATE_MODULE
 #define DEBUG_LOG_ERR_PREFIX       DEBUG_LOG_TEMPLATE_ERR     DEBUG_LOG_TEMPLATE_MODULE
 
+#define USART_TX(__s) USART2_SendString(__s)
 
 #define DEBUG_PRINT_MODULE(__prefix, __module) do { \
-    _debug_uart_tx(__prefix);\
-    _debug_uart_tx(__module);\
-    _debug_uart_tx("\r\n");\
+    USART_TX(__prefix);\
+    USART_TX(__module);\
+    USART_TX("\r\n");\
 } while(0)
 
 
