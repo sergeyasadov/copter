@@ -1,0 +1,33 @@
+#ifndef CLOCK_CONFIG_H
+#define CLOCK_CONFIG_H
+
+#include "../defines.h"
+
+
+__STATIC_INLINE void ClockConfig_72MHz_HSE(void) {
+    RCC->CR |= RCC_CR_HSEON;
+    while(!(RCC->CR & RCC_CR_HSERDY));
+
+    FLASH->ACR &= ~FLASH_ACR_LATENCY;
+    FLASH->ACR |= FLASH_ACR_LATENCY_2;
+
+    RCC->CR |= RCC_CR_HSION;
+
+    RCC->CFGR &= ~(RCC_CFGR_HPRE | RCC_CFGR_PPRE1 | RCC_CFGR_PPRE2);
+    RCC->CFGR |= RCC_CFGR_HPRE_DIV1 | RCC_CFGR_PPRE1_DIV2 | RCC_CFGR_PPRE2_DIV1;
+
+    RCC->CFGR &= ~(RCC_CFGR_PLLMULL9 | RCC_CFGR_PLLSRC);
+    RCC->CFGR |= RCC_CFGR_PLLMULL9 | RCC_CFGR_PLLSRC;
+
+    RCC->CR |= RCC_CR_PLLON;
+    while(!(RCC->CR & RCC_CR_PLLRDY));
+
+    RCC->CFGR &= ~RCC_CFGR_SW_PLL;
+    RCC->CFGR |= RCC_CFGR_SW_PLL;
+    while((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL);
+
+    SysTick_Config(72000000 / 1000);
+}
+
+
+#endif //
