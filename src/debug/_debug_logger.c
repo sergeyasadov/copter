@@ -1,9 +1,12 @@
 #include "../defines.h"
 #include "logger.h"
+#include "../systick.h"
 
 #include "_debug_usart_tx.c"
+#include "stdlib.h"
 
 #include <stdarg.h>
+#include <stdio.h>
 
 #define DEBUG_LOG_COLOR_RED     "\x1B[31m"
 #define DEBUG_LOG_COLOR_GREEN   "\x1B[32m"
@@ -31,9 +34,9 @@
 #define DEBUG_LOG_TEMPLATE_EXC           DEBUG_LOG_TEMPLATE_GENERIC(DEBUG_LOG_COLOR_WHITE DEBUG_LOG_BG_RED DEBUG_LOG_BOLD "EX")
 #define DEBUG_LOG_TEMPLATE_MODULE  "\t"
 
-#define DEBUG_LOG_OK_PREFIX        DEBUG_LOG_TEMPLATE_OK      DEBUG_LOG_TEMPLATE_MODULE
-#define DEBUG_LOG_EXC_PREFIX       DEBUG_LOG_TEMPLATE_EXC     DEBUG_LOG_TEMPLATE_MODULE
-#define DEBUG_LOG_ERR_PREFIX       DEBUG_LOG_TEMPLATE_ERR     DEBUG_LOG_TEMPLATE_MODULE
+#define DEBUG_LOG__OK__PREFIX        DEBUG_LOG_TEMPLATE_OK      DEBUG_LOG_TEMPLATE_MODULE
+#define DEBUG_LOG__EXC__PREFIX       DEBUG_LOG_TEMPLATE_EXC     DEBUG_LOG_TEMPLATE_MODULE
+#define DEBUG_LOG__ERR__PREFIX       DEBUG_LOG_TEMPLATE_ERR     DEBUG_LOG_TEMPLATE_MODULE
 
 #define USART_TX(__s) USART2_SendString(__s)
 
@@ -47,18 +50,20 @@
 __STATIC_INLINE void _debug_logger(const enum LOG_LEVEL level, const char* str) {
     switch(level) {
         case LOG_LEVEL_OK: {
-            DEBUG_PRINT_MODULE(DEBUG_LOG_OK_PREFIX, str);
+            DEBUG_PRINT_MODULE(DEBUG_LOG__OK__PREFIX, str);
             return;
         }
 
         case LOG_LEVEL_ERROR: {
-            DEBUG_PRINT_MODULE(DEBUG_LOG_ERR_PREFIX, str);
+            DEBUG_PRINT_MODULE(DEBUG_LOG__ERR__PREFIX, str);
             return;
         }
 
         case LOG_LEVEL_EXCEPTION: {
-            DEBUG_PRINT_MODULE(DEBUG_LOG_EXC_PREFIX, str);
+            DEBUG_PRINT_MODULE(DEBUG_LOG__EXC__PREFIX, str);
             return;
         }
+        case LOG_LEVEL_RESET:
+        default: return;
     }
 }

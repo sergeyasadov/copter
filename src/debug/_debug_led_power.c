@@ -10,5 +10,5 @@ static inline void _dl_power_on(void) {
 }
 
 static inline void _dl_power_off(void) {
-    GPIOB->BRR = (1u << DL0_POWER) << 16;
+    GPIOB->BSRR = (1u << DL0_POWER) << 16;
 }

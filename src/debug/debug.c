@@ -23,6 +23,9 @@ void debug_init(void) {
 
     _dl_exception_init();
     _debug_logger(LOG_LEVEL_OK, "Debig exception-led init");
+
+    _dl_exception_off();
+    _dl_signal_off();
 }
 
 void debug_log(const enum LOG_LEVEL level, const char* str) {
@@ -33,6 +36,7 @@ void debug_log(const enum LOG_LEVEL level, const char* str) {
             _dl_exception_off();
             return;
         }
+        case LOG_LEVEL_RESET:
         case LOG_LEVEL_ERROR: {
             _dl_signal_off();
             _dl_exception_off();
