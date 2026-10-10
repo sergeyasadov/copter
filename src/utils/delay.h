@@ -1,10 +1,12 @@
-#ifndef DELAY_H
-#define DELAY_H
+#ifndef DELAY_MS
+#define DELAY_MS
 
-#include <stm32f1xx.h>
+#include <stdint.h>
+#include "../systick.h"
 
-void delay_us(const uint32_t us);
+void delay_ms(const uint32_t ms) {
+    uint32_t start = SysTick_Get();
+    while((SysTick_Get() - start) < ms);
+}
 
-void delay_ms(const uint32_t ms);
-
-#endif
+#endif //
