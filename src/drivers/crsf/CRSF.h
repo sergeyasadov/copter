@@ -16,10 +16,11 @@ struct CRSF_TypeDef {
 };
 
 
-void CRSF_Init(void);
+void CRSF_Init(struct CRSF_TypeDef*);
 
-int CRSF_Receive(struct CRSF_TypeDef*);
+uint32_t CRSF_Receive(struct CRSF_TypeDef*) __attribute__((warn_unused_result));
 
 void CRSF_DecodeChannels(const struct CRSF_TypeDef*, uint16_t*);
+
 
 #endif //

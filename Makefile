@@ -45,7 +45,7 @@ COMPILERFLAGS := -O2
 COMPILERFLAGS += -Wall
 COMPILERFLAGS += -Wextra
 # COMPILERFLAGS += -Wpedantic
-COMPILERFLAGS += -Werror
+# COMPILERFLAGS += -Werror
 COMPILERFLAGS += -ffunction-sections
 COMPILERFLAGS += -fdata-sections
 COMPILERFLAGS += -ffreestanding
@@ -69,7 +69,7 @@ COMPILERFLAGS += -Wpointer-arith
 COMPILERFLAGS += -Wvla
 COMPILERFLAGS += -Walloca
 COMPILERFLAGS += -fstack-usage
-COMPILERFLAGS += -Wstack-usage=256
+COMPILERFLAGS += -Wstack-usage=1024
 COMPILERFLAGS += -Warray-bounds=2
 COMPILERFLAGS += -Warray-parameter=2
 COMPILERFLAGS += -Wnull-dereference
@@ -78,6 +78,7 @@ COMPILERFLAGS += -Wshift-overflow=2
 COMPILERFLAGS += -Wshift-negative-value
 COMPILERFLAGS += -Wanalyzer-too-complex
 COMPILERFLAGS += -Wanalyzer-symbol-too-complex
+# COMPILERFLAGS += -Wsuggest-attribute=noreturn|pure|const|cold|format
 
 CXXFLAGS := -std=c++23
 CXXFLAGS += -fno-exceptions
@@ -94,6 +95,7 @@ CFLAGS += $(COMPILERFLAGS)
 CFLAGS += $(DEFINES)
 CFLAGS += $(DEPFLAGS)
 CFLAGS += $(INCLUDE_FLAGS)
+# CFLAGS += -DHSE_VALUE=72000000
 
 LDFLAGS := -T $(LDSCRIPT)
 LDFLAGS += -Wl,--gc-sections

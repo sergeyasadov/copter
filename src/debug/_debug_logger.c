@@ -1,12 +1,10 @@
 #include "../defines.h"
-#include "logger.h"
 #include "../systick.h"
+#include "../status.h"
 
 #include "_debug_usart_tx.c"
-#include "stdlib.h"
 
 #include <stdarg.h>
-#include <stdio.h>
 
 #define DEBUG_LOG_COLOR_RED     "\x1B[31m"
 #define DEBUG_LOG_COLOR_GREEN   "\x1B[32m"
@@ -47,23 +45,16 @@
 } while(0)
 
 
-__STATIC_INLINE void _debug_logger(const enum LOG_LEVEL level, const char* str) {
-    switch(level) {
-        case LOG_LEVEL_OK: {
-            DEBUG_PRINT_MODULE(DEBUG_LOG__OK__PREFIX, str);
-            return;
-        }
+#define DEBUG_LOGGER_OK(__str) DEBUG_PRINT_MODULE(DEBUG_LOG__OK__PREFIX, __str)
+#define DEBUG_LOGGER_ERR(__str) DEBUG_PRINT_MODULE(DEBUG_LOG__ERR__PREFIX, __str)
+#define DEBUG_LOGGER_EXC(__str) DEBUG_PRINT_MODULE(DEBUG_LOG__EXC__PREFIX, __str)
 
-        case LOG_LEVEL_ERROR: {
-            DEBUG_PRINT_MODULE(DEBUG_LOG__ERR__PREFIX, str);
-            return;
-        }
 
-        case LOG_LEVEL_EXCEPTION: {
-            DEBUG_PRINT_MODULE(DEBUG_LOG__EXC__PREFIX, str);
-            return;
-        }
-        case LOG_LEVEL_RESET:
-        default: return;
-    }
+__STATIC_INLINE void _debug_logger(const enum Status status, const char* str) {
+    STATUS_SWITCH(
+        status,
+        DEBUG_PRINT_MODULE(DEBUG_LOG__OK__PREFIX, str),
+        DEBUG_PRINT_MODULE(DEBUG_LOG__ERR__PREFIX, str),
+        DEBUG_PRINT_MODULE(DEBUG_LOG__EXC__PREFIX, str)
+    );
 }

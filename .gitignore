@@ -6,7 +6,6 @@
 compile_commands.json
 /.cache
 /libs
-compile_commands.json
 .clangd
 ._clangd
 src/_old/
