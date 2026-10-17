@@ -1,10 +1,9 @@
-#include "../defines.h"
-#include "../systick.h"
-#include "../status.h"
+#ifndef DEBUG_LOGGER_H
+#define DEBUG_LOGGER_H
 
-#include "_debug_usart_tx.c"
+#include "../../status.h"
 
-#include <stdarg.h>
+#include "USART2.h"
 
 #define DEBUG_LOG_COLOR_RED     "\x1B[31m"
 #define DEBUG_LOG_COLOR_GREEN   "\x1B[32m"
@@ -50,7 +49,12 @@
 #define DEBUG_LOGGER_EXC(__str) DEBUG_PRINT_MODULE(DEBUG_LOG__EXC__PREFIX, __str)
 
 
-__STATIC_INLINE void _debug_logger(const enum Status status, const char* str) {
+__STATIC_FORCEINLINE void DebugLogger_Init(void) {
+    USART2_Init();
+    DEBUG_LOGGER_OK("USART2 Init");
+}
+
+__STATIC_FORCEINLINE void DebugLogger_Print(const enum Status status, const char* str) {
     STATUS_SWITCH(
         status,
         DEBUG_PRINT_MODULE(DEBUG_LOG__OK__PREFIX, str),
@@ -58,3 +62,5 @@ __STATIC_INLINE void _debug_logger(const enum Status status, const char* str) {
         DEBUG_PRINT_MODULE(DEBUG_LOG__EXC__PREFIX, str)
     );
 }
+
+#endif // DEBUG_LOGGER_H

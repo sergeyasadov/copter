@@ -1,4 +1,7 @@
-#include "../defines.h"
+#ifndef DEBUG_USART2_H
+#define DEBUG_USART2_H
+
+#include "../../defines.h"
 
 
 __STATIC_INLINE
@@ -16,3 +19,20 @@ void USART2_Init(void) {
 
     USART2->CR1 |= USART_CR1_UE | USART_CR1_TE | USART_CR1_RE;
 }
+
+
+__STATIC_INLINE
+void USART2_SendByte(const uint_fast8_t ch) {
+    while(!(USART2->SR & USART_SR_TXE));
+    USART2->DR = ch;
+}
+
+
+__STATIC_INLINE
+void USART2_SendString(const char* str) {
+    while(*str)
+        USART2_SendByte(*str++);
+}
+
+
+#endif // DEBUG_USART2_H

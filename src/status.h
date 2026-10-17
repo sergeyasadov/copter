@@ -1,9 +1,7 @@
 #ifndef STATUS_CODE_H
 #define STATUS_CODE_H
 
-// #include <cmsis_clang.h>
 #include <stdint.h>
-
 
 #define MAKE_STATUS(__mod, __err)   ((uint32_t)(((__mod) << 16) | (__err)))
 #define GET_STATUS(__status)        ((uint32_t)(((__status) >> 16) & 0xFFFF))
