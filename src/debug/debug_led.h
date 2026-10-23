@@ -17,8 +17,8 @@ enum DebugLed_Types {
 
 #define STATE_SWITCH(__state, __on, __off) do {\
     switch(__state) {\
-        case 0: { __off; }\
-        case 1: { __on; }\
+        case 0: { __off; break; }\
+        case 1: { __on; break; }\
     }\
 } while(0)
 

@@ -44,8 +44,8 @@ DEPFLAGS := -MMD -MP
 COMPILERFLAGS := -O2
 COMPILERFLAGS += -Wall
 COMPILERFLAGS += -Wextra
-# COMPILERFLAGS += -Wpedantic
-# COMPILERFLAGS += -Werror
+COMPILERFLAGS += -Wpedantic
+COMPILERFLAGS += -Werror
 COMPILERFLAGS += -ffunction-sections
 COMPILERFLAGS += -fdata-sections
 COMPILERFLAGS += -ffreestanding
@@ -78,7 +78,6 @@ COMPILERFLAGS += -Wshift-overflow=2
 COMPILERFLAGS += -Wshift-negative-value
 COMPILERFLAGS += -Wanalyzer-too-complex
 COMPILERFLAGS += -Wanalyzer-symbol-too-complex
-# COMPILERFLAGS += -Wsuggest-attribute=noreturn|pure|const|cold|format
 
 CXXFLAGS := -std=c++23
 CXXFLAGS += -fno-exceptions
@@ -140,6 +139,10 @@ $(BUILD_PATH)/%.o: $(SOURCE_PATH)/%.c
 .PHONY: flash
 flash: $(BIN_PATH)/$(MAIN_FILE).bin
 	st-flash write $< 0x08000000
+
+.PHONY: erase
+erase:
+	st-flash --connect-under-reset erase
 
 .PHONY: clean
 clean:

@@ -78,11 +78,11 @@ void CRSF_Init(struct CRSF_TypeDef* crsf) {
     DMA1_Channel5->CNDTR = CRSF_BUFFER_SIZE;
     DMA1_Channel5->CCR |= DMA_CCR_EN;
 
-    GPIOB->CRL &= ~((0b1111u << (4 * ELRS_TX)));
-    GPIOB->CRL |= (0b1011u << (4 * ELRS_TX));
+    GPIOB->CRL &= ~((0xFUL << (4 * ELRS_TX)));
+    GPIOB->CRL |= (0xBUL << (4 * ELRS_TX));
 
-    GPIOB->CRL &= ~((0b1111u << (4 * ELRS_RX)));
-    GPIOB->CRL |= (0b0100u << (4 * ELRS_RX));
+    GPIOB->CRL &= ~((0xFUL << (4 * ELRS_RX)));
+    GPIOB->CRL |= (0x4UL << (4 * ELRS_RX));
 
     USART1->BRR = 0xAB;
 

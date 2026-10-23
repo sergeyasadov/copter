@@ -15,7 +15,7 @@ enum Status_ModuleID {
 };
 
 
-enum Status : uint32_t {
+enum Status {
     // Sys
     STATUS_OK = MAKE_STATUS(MOD_SYS, 0x0000),
     STATUS_ERROR = MAKE_STATUS(MOD_SYS, 0x0001),
