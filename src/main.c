@@ -1,130 +1,74 @@
-#include "defines.h"
-#include "gpio.h"
-#include "pwm.h"
-#include "utils.h"
-#include "adc.h"
-#include "uart.h"
-#include "twi.h"
+#include "drivers/crsf/CRSF.h"
+#include "utils/clock_config.h"
+#include "debug/debug.h"
+#include "utils/delay.h"
+#include "utils/TON.h"
+#include "status.h"
+#include "drivers/mpu9250/mpu9250.h"
 
+#include <stdint.h>
 #include <stdio.h>
-#include <avr/interrupt.h>
+
+
+// volatile uint32_t* const SOFTREBOOT = (volatile uint32_t*)(0x20004FFC);
 
 
 int main(void) {
+    ClockConfig_72MHz_HSE();
 
-    // ADC_t pot = {
-    //     .gpio = {
-    //         .port = GPIO_PORT_PWM_MOTOR_2,
-    //         .pin = PA3,
-    //         .dir = GPIO_DIR_INPUT
-    //     },
-    //     .presc = ADC_PRESCALER_2,
-    //     .ref = ADC_REF_VCC
-    // };
-    // ADC_Init(&pot);
+    delay_ms(1500);
 
+    RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+    RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
 
-    // const PWM_t motors[] = {
-    //     (PWM_t){
-    //         .gpio = {
-    //             .dir = GPIO_DIR_OUTPUT,
-    //             .pin = GPIO_PIN_PWM_MOTOR_1,
-    //             .port = GPIO_PORT_PWM_MOTOR_1
-    //         },
-    //         .prescaler = PWM_PRESCALER_1
-    //     },
-    //     (PWM_t){
-    //         .gpio = {
-    //             .dir = GPIO_DIR_OUTPUT,
-    //             .pin = GPIO_PIN_PWM_MOTOR_2,
-    //             .port = GPIO_PORT_PWM_MOTOR_3
-    //         },
-    //         .prescaler = PWM_PRESCALER_1
-    //     },
-    //     (PWM_t){
-    //         .gpio = {
-    //             .dir = GPIO_DIR_OUTPUT,
-    //             .pin = GPIO_PIN_PWM_MOTOR_3,
-    //             .port = GPIO_PORT_PWM_MOTOR_3
-    //         },
-    //         .prescaler = PWM_PRESCALER_1
-    //     },
-    //     (PWM_t){
-    //         .gpio = {
-    //             .dir = GPIO_DIR_OUTPUT,
-    //             .pin = GPIO_PIN_PWM_MOTOR_4,
-    //             .port = GPIO_PORT_PWM_MOTOR_4
-    //         },
-    //         .prescaler = PWM_PRESCALER_1
-    //     }
-    // };
-    // ARR_FOREACH(motors, i) {
-    //     PWM_Init(&motors[i]);
+    AFIO->MAPR = (AFIO->MAPR & ~AFIO_MAPR_SWJ_CFG) | AFIO_MAPR_SWJ_CFG_JTAGDISABLE;
+
+    DebugInit();
+
+    // struct CRSF_TypeDef crsf;
+    // CRSF_Init(&crsf);
+    // uint16_t crsf_data[64];
+    // char buf[32];
+    // debug_log(STATUS_OK, "CRSF Init");
+
+    MPU9250_Init();
+
+    // if(!soft_reboot) {
+    //     debug_log(STATUS_EXCEPTION, "Software system reset");
+    //     soft_reboot = 1;
+    //     NVIC_SystemReset();
     // }
+    // soft_reboot = 0;
 
-    
+    MPU9250_Write(0x6b, 0x80);
+    delay_ms(100);
+    MPU9250_Write(0x6b, 0x01);
+    MPU9250_Write(0x6a, 0x10);
 
-    
-    UART_t uart = {
-        .tx = {
-            .port = GPIO_PORT_UART_TX,
-            .pin = GPIO_PIN_UART_TX
-        },
-        .rx = {
-            .port = GPIO_PORT_UART_RX,
-            .pin = GPIO_PIN_UART_RX
-        }
-    };
-    UART_Init(&uart);
+    DebugLogf(STATUS_OK, "ID = %x", MPU9250_Read(0x75));
+    DebugLogf(STATUS_OK, "ID = %x", MPU9250_Read(0x6A));
 
+    // uint32_t got = 1;
+    while (1) {
+        DebugLog(STATUS_ERROR, "ERROR");
+        delay_ms(1000);
+        DebugLog(STATUS_OK, "OK");
+        delay_ms(50);
 
-    TWI_t twi = {
-        .sda = {
-            .port = GPIO_PORT_TWI_SDA,
-            .pin = GPIO_PIN_UART_TX
-        },
-        .scl = {
-            .port = GPIO_PORT_TWI_SCL,
-            .pin = GPIO_PIN_TWI_SCL
-        }
-    };
-    TWI_Init(&twi);
-    
-
-    char str[32];
-
-    while(1) {
-        // ARR_FOREACH(str, i) {
-        //     UART_SendByte(&uart, (uint8_t)str[i]);
+        // if(CRSF_Receive(&crsf) == STATUS_CRSF_RECEIVED) {
+        //     got = 1;
         // }
-
-        // register uint8_t res = ADC_Read(&pot) >> 2;
-
-        
-        uint8_t twi_byte = TWI_ReadByte(0);
-        
-        sprintf(str, "%d\r\n", twi_byte);
-
-        UART_SendString(str);
-
-        delayMs(120);
-
-
-        // for(uint8_t i = 0; i < 0xff; i++) {
-        //     PWM_Set(&motor1, i);
-        //     delayMs(5);
+        // if(got) {
+        //     CRSF_DecodeChannels(&crsf, crsf_data);
+        //     snprintf(buf, sizeof(buf), "%u\t%u\t%u\t%u\t%u",
+        //         crsf_data[0],
+        //         crsf_data[1],
+        //         crsf_data[2],
+        //         crsf_data[3],
+        //         crsf_data[4]
+        //     );
+        //     debug_log(STATUS_OK, buf);
+        //     got = 0;
         // }
-        // for(uint8_t i = 0xff; i; i--) {
-        //     PWM_Set(&motor1, i);
-        //     delayMs(5);
-        // }
-
-        // OCR1A = ADC_Read(&pot) >> 2;
-
-        // ARR_FOREACH(motors, i) {
-        //     PWM_Set(&motors[i], res);
-        // }
-
-        // PWM_Set(&motor1, ADC_Read(&pot) >> 2);
     }
 }

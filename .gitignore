@@ -3,3 +3,10 @@
 /build
 /CAD/DriverMotor/driver/driver-backups
 /CAD/DriverMotor/driver/.history
+compile_commands.json
+/.cache
+/libs
+.clangd
+._clangd
+src/_old/
+firmware.map

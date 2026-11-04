@@ -1,65 +1,46 @@
-#ifndef __COPTER_DEFINES_H__
-#define __COPTER_DEFINES_H__
+#ifndef DEFINES_H
+#define DEFINES_H
+
+#include <stm32f1xx.h>
+
+//========================================================================================
+#define ARR_SIZE(__arr) (sizeof(__arr) / sizeof(__arr[0]))
+//========================================================================================
+#define CLAMP(__val, __min, __max) \
+    ((__val) < (__min) ? (__min) : (__val) > (__max) ? (__max) : (__val) )
+//========================================================================================
+#define ARR_FOREACH(__arr, __i) \
+    for(uint_fast8_t __i = 0, __s = ARR_SIZE(__arr); __i < __s; __i++)
+//========================================================================================
+#define LINTERP(x, x1, x2, y1, y2) \
+    ( (y1) + ( (uint32_t)((x) - (x1)) * ((y2) - (y1)) ) / ((x2) - (x1)) )
+//========================================================================================
+#define TICKS_TO_US(x)  (((x) - 992) * 5 / 8 + 1500)
+#define US_TO_TICKS(x)  (((x) - 1500) * 8 / 5 + 992)
+//========================================================================================
+// DEBUG LED
+#define DL0_POWER       3UL //PB3
+#define DL1_SIGNAL      4UL //PB4
+#define DL2_EXCEPTION   5UL //PB5
+//========================================================================================
+// ELRS [CRSF] (UART1) [Not sync]
+// Async 420'000 bits/s ~ 420'000 baud
+// 8 bits, no parity, 1 stop bit
+// Interrupt-driven
+#define ELRS_TX     6UL //PB6
+#define ELRS_RX     7UL //PB7
+//========================================================================================
+// MPU-9560/6500 (SPI1)
+#define MPU_SCK     5UL //PA5
+#define MPU_MOSI    7UL //PA7
+#define MPU_MISO    6UL //PA6
+#define MPU_NSS     4UL //PA4
+#define MPU_INT     0UL //PB0
+//========================================================================================
+// UART_DEBUG (UART2) [Not sync]
+#define UART_DEBUG_TX   2u //PA2
+#define UART_DEBUG_RX   3u //PA3
+//========================================================================================
 
 
-#define D_FREQ_MCU ((unsigned long)1e6)
-
-
-/// AVR ///
-#ifdef __AVR_ARCH__
-
-#ifndef __AVR_ATtiny44A__
-#define __AVR_ATtiny44A__
-#endif
-
-#ifdef F_CPU
-#   define F_CPU D_FREQ_MCU
-#endif // F_CPU
-
-#include <avr/io.h>
-#include <util/delay.h>
-
-typedef uint8_t GPIO_Pin_t;
-typedef uint8_t GPIO_Value_t;
-typedef enum GPIO_Port GPIO_Port_t;
-
-typedef uint8_t  PWM_Duty_t;
-typedef uint8_t  PWM_Freq_t;
-typedef uint8_t  PWM_Value_t;
-
-#ifndef delayMs
-#   define delayMs _delay_ms
-#endif
-
-#ifndef delayUs
-#   define delayUs _delay_us
-#endif
-
-#endif //__AVR_ARCH__
-/// AVR ///
-
-extern const GPIO_Pin_t GPIO_PIN_TWI_SDA;
-extern const GPIO_Pin_t GPIO_PIN_TWI_SCL;
-
-extern const GPIO_Pin_t GPIO_PIN_UART_TX;
-extern const GPIO_Pin_t GPIO_PIN_UART_RX;
-
-extern const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_1; 
-extern const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_2; 
-extern const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_3;
-extern const GPIO_Pin_t GPIO_PIN_PWM_MOTOR_4;
-
-extern const GPIO_Port_t GPIO_PORT_TWI_SDA;
-extern const GPIO_Port_t GPIO_PORT_TWI_SCL;
-
-extern const GPIO_Port_t GPIO_PORT_UART_RX;
-extern const GPIO_Port_t GPIO_PORT_UART_TX;
-
-extern const GPIO_Port_t GPIO_PORT_PWM_MOTOR_1; 
-extern const GPIO_Port_t GPIO_PORT_PWM_MOTOR_2; 
-extern const GPIO_Port_t GPIO_PORT_PWM_MOTOR_3;
-extern const GPIO_Port_t GPIO_PORT_PWM_MOTOR_4;
-
-
-
-#endif // __COPTER_DEFINES_H__
+#endif // DEFINES_H
