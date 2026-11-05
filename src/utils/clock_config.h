@@ -28,7 +28,7 @@ __STATIC_INLINE void ClockConfig_8MHz_HSI(void) {
 
 
 __STATIC_INLINE int ClockConfig_72MHz_HSE(void) {
-    uint32_t t;
+    volatile uint32_t t;
 
     RCC->CR |= RCC_CR_HSEON;
     for(t = 0; t < 200000 && !(RCC->CR & RCC_CR_HSERDY); t++);
@@ -40,7 +40,7 @@ __STATIC_INLINE int ClockConfig_72MHz_HSE(void) {
     }
 
     FLASH->ACR = (FLASH->ACR & ~FLASH_ACR_LATENCY) | FLASH_ACR_LATENCY_2 | FLASH_ACR_PRFTBE;
-
+    
     RCC->CFGR = (RCC->CFGR & ~(RCC_CFGR_HPRE | RCC_CFGR_PPRE1 | RCC_CFGR_PPRE2
                              | RCC_CFGR_PLLMULL | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLSRC))
               | RCC_CFGR_HPRE_DIV1 | RCC_CFGR_PPRE1_DIV2 | RCC_CFGR_PPRE2_DIV1

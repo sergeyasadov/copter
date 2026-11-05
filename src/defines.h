@@ -19,9 +19,15 @@
 #define US_TO_TICKS(x)  (((x) - 1500) * 8 / 5 + 992)
 //========================================================================================
 // DEBUG LED
-#define DL0_POWER       3UL //PB3
-#define DL1_SIGNAL      4UL //PB4
+#define DL0_POWER       8UL //PB8
+#define DL1_SIGNAL      9UL //PB9
 #define DL2_EXCEPTION   5UL //PB5
+//========================================================================================
+// D-Motor
+#define MOTOR_CH1   8UL
+#define MOTOR_CH2   9UL
+#define MOTOR_CH3   10UL
+#define MOTOR_CH4   11UL
 //========================================================================================
 // ELRS [CRSF] (UART1) [Not sync]
 // Async 420'000 bits/s ~ 420'000 baud
