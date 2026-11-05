@@ -9,6 +9,8 @@
 #define DEBUG_BUF_LOGF_SIZE 128
 //========================================================================================
 void DebugInit(void) {
+    RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+
     DebugLogger_Init();
     DEBUG_LOGGER_OK("Debug logger init");
 

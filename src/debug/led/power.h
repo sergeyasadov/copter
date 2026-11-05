@@ -4,16 +4,16 @@
 #include "../../defines.h"
 
 __STATIC_FORCEINLINE void DebugLed_Power_Init(void) {
-    GPIOB->CRL &= ~(0b1111u << (4 * DL0_POWER));
-    GPIOB->CRL |= (0b0010u << (4 * DL0_POWER));
+    GPIOB->CRH &= ~(GPIO_CRH_CNF8 | GPIO_CRH_MODE8);
+    GPIOB->CRH |= GPIO_CRH_MODE8_0 | GPIO_CRH_MODE8_1;
 }
 
 __STATIC_FORCEINLINE void DebugLed_Power_On(void) {
-    GPIOB->BSRR = (1u << DL0_POWER);
+    GPIOB->BSRR |= GPIO_BSRR_BS8;
 }
 
 __STATIC_FORCEINLINE void DebugLed_Power_Off(void) {
-    GPIOB->BSRR = (1u << (DL0_POWER + 16UL));
+    GPIOB->BSRR |= GPIO_BSRR_BR8;
 }
 
 

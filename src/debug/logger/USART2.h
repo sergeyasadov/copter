@@ -9,11 +9,11 @@ void USART2_Init(void) {
     RCC->APB1ENR |= RCC_APB1ENR_USART2EN;
     RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_AFIOEN;
 
-    GPIOA->CRL &= ~((0b1111u << (4 * UART_DEBUG_TX)));
-    GPIOA->CRL |= (0b1011u << (4 * UART_DEBUG_TX));
+    GPIOA->CRL &= ~((0xFUL << (4 * UART_DEBUG_TX)));
+    GPIOA->CRL |= (0xBUL << (4 * UART_DEBUG_TX));
 
-    GPIOA->CRL &= ~((0b1111u << (4 * UART_DEBUG_RX)));
-    GPIOA->CRL |= (0b0100u << (4 * UART_DEBUG_RX));
+    GPIOA->CRL &= ~((0xFUL << (4 * UART_DEBUG_RX)));
+    GPIOA->CRL |= (0x4UL << (4 * UART_DEBUG_RX));
 
     USART2->BRR = 0x139; // 115200 baud
 
