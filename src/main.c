@@ -2,6 +2,7 @@
 #include "drivers/crsf/CRSF.h"
 #include "drivers/mpu9250/mpu9250.h"
 #include "drivers/mpu9250/SPI1.h"
+#include "drivers/motor/TIM1.h"
 #include "hardfault.h"
 #include "utils/clock_config.h"
 #include "debug/debug.h"
@@ -21,12 +22,24 @@ int main(void) {
 
     // MPU9250_Init();
 
-    SPI1_GPIO_Init();
+    TIM1_Init();
 
+
+    DebugLog(STATUS_OK, "11");
 
     while (1) {
+        // for(uint_fast8_t i = 0; i < 100; i++) {
+        //     TIM1_Set(i);
+        //     DebugLogf(STATUS_OK, "%i", i);
+        //     delay_ms(50);
+        // }
+        // delay_ms(500);
+        // for(uint_fast8_t i = 100; i; i--) {
+        //     TIM1_Set(i);
+        //     DebugLogf(STATUS_OK, "%i", i);
+        //     delay_ms(50);
+        // }
         // DebugLogf(STATUS_OK, "%X", MPU9250_ReadReg(0x75));
-        delay_ms(2000);
     }
 }
 

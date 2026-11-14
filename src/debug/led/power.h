@@ -1,7 +1,9 @@
 #ifndef DEBUG_LED_POWER_H
 #define DEBUG_LED_POWER_H
 
+
 #include "../../defines.h"
+
 
 __STATIC_FORCEINLINE void DebugLed_Power_Init(void) {
     GPIOB->CRH &= ~(GPIO_CRH_CNF8 | GPIO_CRH_MODE8);
@@ -9,11 +11,11 @@ __STATIC_FORCEINLINE void DebugLed_Power_Init(void) {
 }
 
 __STATIC_FORCEINLINE void DebugLed_Power_On(void) {
-    GPIOB->BSRR |= GPIO_BSRR_BS8;
+    GPIOB->BSRR |= (1UL << DL0_POWER);
 }
 
 __STATIC_FORCEINLINE void DebugLed_Power_Off(void) {
-    GPIOB->BSRR |= GPIO_BSRR_BR8;
+    GPIOB->BRR |= (1UL << DL0_POWER);
 }
 
 
