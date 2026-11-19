@@ -1,8 +1,6 @@
 #include "mpu9250.h"
 #include "SPI1.h"
 
-#include "../../defines.h"
-#include "../../debug/debug.h"
 
 #define MPU_REG_USER_CTRL   0x6A
 #define MPU_REG_PWR_MGMT_1  0x6B

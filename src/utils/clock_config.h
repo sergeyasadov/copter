@@ -1,12 +1,13 @@
 #ifndef CLOCK_CONFIG_H
 #define CLOCK_CONFIG_H
 
-#include "../defines.h"
+#include <stm32f1xx.h>
+
 
 extern uint32_t SystemCoreClock;
 
 
-__STATIC_INLINE void ClockConfig_8MHz_HSI(void) {
+__STATIC_INLINE void ClockConfig_8MHz_HSI_Init(void) {
     RCC->CR |= RCC_CR_HSION;
     while(!(RCC->CR & RCC_CR_HSIRDY));
 
@@ -27,7 +28,7 @@ __STATIC_INLINE void ClockConfig_8MHz_HSI(void) {
 }
 
 
-__STATIC_INLINE int ClockConfig_72MHz_HSE(void) {
+__STATIC_INLINE int ClockConfig_72MHz_HSE_Init(void) {
     volatile uint32_t t;
 
     RCC->CR |= RCC_CR_HSEON;
@@ -40,7 +41,7 @@ __STATIC_INLINE int ClockConfig_72MHz_HSE(void) {
     }
 
     FLASH->ACR = (FLASH->ACR & ~FLASH_ACR_LATENCY) | FLASH_ACR_LATENCY_2 | FLASH_ACR_PRFTBE;
-    
+
     RCC->CFGR = (RCC->CFGR & ~(RCC_CFGR_HPRE | RCC_CFGR_PPRE1 | RCC_CFGR_PPRE2
                              | RCC_CFGR_PLLMULL | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLSRC))
               | RCC_CFGR_HPRE_DIV1 | RCC_CFGR_PPRE1_DIV2 | RCC_CFGR_PPRE2_DIV1

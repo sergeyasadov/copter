@@ -1,7 +1,7 @@
 #ifndef TON_H
 #define TON_H
 
-#include <stm32f1xx.h>
+#include <stdint.h>
 
 struct TON {
     uint8_t IN;

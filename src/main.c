@@ -2,7 +2,7 @@
 #include "drivers/crsf/CRSF.h"
 #include "drivers/mpu9250/mpu9250.h"
 #include "drivers/mpu9250/SPI1.h"
-#include "drivers/motor/TIM1.h"
+#include "drivers/motor/motor.h"
 #include "hardfault.h"
 #include "utils/clock_config.h"
 #include "debug/debug.h"
@@ -15,30 +15,37 @@
 
 
 int main(void) {
-    ClockConfig_72MHz_HSE();
-    delay_ms(1500);
+    ClockConfig_72MHz_HSE_Init();
+    DelayMs(1500);
 
-    DebugInit();
+    Debug_Init();
 
     // MPU9250_Init();
 
-    TIM1_Init();
+    struct Motor_TypeDef motor;
+    Motor_Init(&motor);
 
-
-    DebugLog(STATUS_OK, "11");
+    DebugLog(STATUS_OK, "Test");
 
     while (1) {
-        // for(uint_fast8_t i = 0; i < 100; i++) {
-        //     TIM1_Set(i);
-        //     DebugLogf(STATUS_OK, "%i", i);
-        //     delay_ms(50);
-        // }
-        // delay_ms(500);
-        // for(uint_fast8_t i = 100; i; i--) {
-        //     TIM1_Set(i);
-        //     DebugLogf(STATUS_OK, "%i", i);
-        //     delay_ms(50);
-        // }
+        for(uint8_t i = 0; i < 100; i++) {
+            DebugLogf(STATUS_OK, "%i", i);
+            motor.value[0] = motor.value[1] = motor.value[2] = motor.value[3] = i;
+            Motor_Set(&motor);
+
+            DelayMs(10);
+        }
+
+        DelayMs(2000);
+        for(uint8_t i = 0; i < 100; i++) {
+            DebugLogf(STATUS_OK, "%i", i);
+            motor.value[0] = motor.value[1] = motor.value[2] = motor.value[3] = (uint8_t)(100u - i);
+            Motor_Set(&motor);
+
+            DelayMs(10);
+        }
+        Motor_Reset(&motor);
+        DelayMs(2000);
         // DebugLogf(STATUS_OK, "%X", MPU9250_ReadReg(0x75));
     }
 }

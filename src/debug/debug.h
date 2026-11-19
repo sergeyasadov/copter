@@ -4,7 +4,7 @@
 #include "../status.h"
 
 
-void DebugInit(void);
+void Debug_Init(void);
 
 void DebugLog(const enum Status, const char* str);
 
