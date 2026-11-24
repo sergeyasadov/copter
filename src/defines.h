@@ -1,7 +1,7 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-#include "iodefs.h"
+#include <stm32f103xb.h>
 
 //========================================================================================
 #define ARR_SIZE(__arr) (sizeof(__arr) / sizeof(__arr[0]))

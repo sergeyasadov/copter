@@ -2,19 +2,18 @@
 #define IODEFINES_H
 
 
-#include <stm32f103xb.h>
 //========================================================================================
 // DEBUG LED
 #define GPIO_DL0_POWER_Bit       (8UL) //PB8
-#define GPIODL0_POWER_Msk        (1UL << GPIO_DL0_POWER_Bit)
+#define GPIO_DL0_POWER_Msk        (1UL << GPIO_DL0_POWER_Bit)
 #define GPIO_DL0_POWER           GPIO_DL0_POWER_Msk
 
 #define GPIO_DL1_SIGNAL_Bit      (9UL) //PB9
-#define GPIO_DL1_SIGNAL_Msk      (1UL << GPIO_DL1_SIGNAL_Msk)
+#define GPIO_DL1_SIGNAL_Msk      (1UL << GPIO_DL1_SIGNAL_Bit)
 #define GPIO_DL1_SIGNAL          GPIO_DL1_SIGNAL_Msk
 
 #define GPIO_DL2_EXCEPTION_Bit   (5UL) //PB5
-#define GPIO_DL2_EXCEPTION_Msk   (1UL << GPIO_DL1_EXCEPTION_Msk)
+#define GPIO_DL2_EXCEPTION_Msk   (1UL << GPIO_DL2_EXCEPTION_Bit)
 #define GPIO_DL2_EXCEPTION       GPIO_DL2_EXCEPTION_Msk
 //========================================================================================
 // D-Motor

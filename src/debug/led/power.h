@@ -1,8 +1,8 @@
 #ifndef DEBUG_LED_POWER_H
 #define DEBUG_LED_POWER_H
 
-
 #include "../../defines.h"
+#include "../../iodefs.h"
 
 
 __STATIC_FORCEINLINE void DebugLed_Power_Init(void) {
@@ -11,11 +11,11 @@ __STATIC_FORCEINLINE void DebugLed_Power_Init(void) {
 }
 
 __STATIC_FORCEINLINE void DebugLed_Power_On(void) {
-    GPIOB->BSRR |= (1UL << DL0_POWER);
+    GPIOB->BSRR |= GPIO_DL0_POWER;
 }
 
 __STATIC_FORCEINLINE void DebugLed_Power_Off(void) {
-    GPIOB->BRR |= (1UL << DL0_POWER);
+    GPIOB->BRR |= GPIO_DL0_POWER;
 }
 
 

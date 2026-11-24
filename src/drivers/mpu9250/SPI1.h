@@ -2,6 +2,7 @@
 #define SPI1_H
 
 #include "../../defines.h"
+#include "../../iodefs.h"
 #include "../../debug/debug.h"
 
 
@@ -20,11 +21,11 @@ enum SPI1_BaudRate {
 __STATIC_INLINE void SPI1_CS_Set(const uint_fast32_t state) {
     switch(state) {
         case 0: {
-            GPIOA->BSRR = (1UL << (MPU_NSS + 16));
+            GPIOA->BRR = GPIO_MPU_NSS;
             return;
         }
         case 1: {
-            GPIOA->BSRR = (1UL << MPU_NSS);
+            GPIOA->BSRR = GPIO_MPU_NSS;
             return;
         }
         default: return;
@@ -39,21 +40,20 @@ __STATIC_INLINE void SPI1_GPIO_Init(void) {
 
     SPI1_CS_Set(1);
 
-    GPIOA->CRL &= ~(  (0xFUL << (MPU_NSS * 4))
-                    | (0xFUL << (MPU_INT * 4))
-                    | (0xFUL << (MPU_MISO * 4))
-                    | (0xFUL << (MPU_MOSI * 4))
-                    | (0xFUL << (MPU_SCK * 4))
+    GPIOA->CRL &= ~(  (0xFUL << (GPIO_MPU_NSS_Bit * 4))
+                    | (0xFUL << (GPIO_MPU_INT_Bit * 4))
+                    | (0xFUL << (GPIO_MPU_MISO_Bit * 4))
+                    | (0xFUL << (GPIO_MPU_MOSI_Bit * 4))
+                    | (0xFUL << (GPIO_MPU_SCK_Bit * 4))
                     );
 
-    GPIOA->CRL |= (0x3UL << (MPU_NSS * 4))  // PA4 CS:   output push-pull
-               |  (0xBUL << (MPU_SCK * 4))  // PA5 SCK:  AF push-pull
-               |  (0x4UL << (MPU_MISO * 4)) // PA6 MISO: floating input
-               |  (0xBUL << (MPU_MOSI * 4))// PA7 MOSI: AF push-pull
-               |  (0x4UL << (MPU_INT * 4));
+    GPIOA->CRL |= (0x3UL << (GPIO_MPU_NSS_Bit * 4))     // PA4 CS:   output push-pull
+               |  (0xBUL << (GPIO_MPU_SCK_Bit * 4))     // PA5 SCK:  AF push-pull
+               |  (0x4UL << (GPIO_MPU_MISO_Bit * 4))    // PA6 MISO: floating input
+               |  (0xBUL << (GPIO_MPU_MOSI_Bit * 4))    // PA7 MOSI: AF push-pull
+               |  (0x4UL << (GPIO_MPU_INT_Bit * 4));
 
     // GPIOA->ODR |= (1UL << MPU_MISO);
-
     DebugLog(STATUS_OK, "SPI1 GPIO Init");
 }
 

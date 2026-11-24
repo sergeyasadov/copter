@@ -3,6 +3,7 @@
 #include "../../protocols/CRSF/CRSF_Defines.h"
 #include "../../protocols/CRSF/CRSF.h"
 #include "../../defines.h"
+#include "../../iodefs.h"
 #include "../../status.h"
 
 #include <string.h>
@@ -68,11 +69,11 @@ void CRSF_Receiver_Init(struct CRSF_TypeDef* crsf) {
     DMA1_Channel5->CNDTR = CRSF_BUFFER_SIZE;
     DMA1_Channel5->CCR |= DMA_CCR_EN;
 
-    GPIOB->CRL &= ~((0xFUL << (4 * ELRS_TX)));
-    GPIOB->CRL |= (0xBUL << (4 * ELRS_TX));
+    GPIOB->CRL &= ~((0xFUL << (4 * GPIO_ELRS_TX_Bit)));
+    GPIOB->CRL |= (0xBUL << (4 * GPIO_ELRS_TX_Bit));
 
-    GPIOB->CRL &= ~((0xFUL << (4 * ELRS_RX)));
-    GPIOB->CRL |= (0x4UL << (4 * ELRS_RX));
+    GPIOB->CRL &= ~((0xFUL << (4 * GPIO_ELRS_RX_Bit)));
+    GPIOB->CRL |= (0x4UL << (4 * GPIO_ELRS_RX_Bit));
 
     USART1->BRR = 0xAB;
 
