@@ -1,7 +1,9 @@
-#ifndef TON_H
-#define TON_H
+#ifndef UTILS_TON_H
+#define UTILS_TON_H
+
 
 #include <stdint.h>
+
 
 struct TON {
     uint8_t IN;
@@ -16,8 +18,8 @@ struct TON {
     uint32_t (*fGetCurrentMS)(void);
 };
 
-void TON_Init(struct TON* timer, uint32_t (*fGetCurrentMS)(void));
+void TON_Init(struct TON* timer, uint32_t(*fGetCurrentMS)(void));
 
 void TON_Update(struct TON* timer);
 
-#endif
+#endif // UTILS_TON_H

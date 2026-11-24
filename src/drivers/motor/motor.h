@@ -20,7 +20,7 @@ void Motor_Init(struct Motor_TypeDef*);
 
 void Motor_Set(const struct Motor_TypeDef*);
 
-void Motor_Write(struct Motor_TypeDef*, const uint8_t* __RESTRICT);
+void Motor_Write(const uint_fast8_t n, const uint_fast8_t val);
 
 void Motor_Reset(struct Motor_TypeDef*);
 

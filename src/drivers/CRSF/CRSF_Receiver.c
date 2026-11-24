@@ -97,9 +97,9 @@ uint32_t CRSF_Receiver_Read(struct CRSF_TypeDef* crsf) {
         const uint8_t b = crsf_rx_buffer[rx_tail];
         rx_tail = (rx_tail + 1u) & CRSF_MASK;
         if(p_CRSF_Receiver_Feed(crsf, b)) {
-            return STATUS_CRSF_RECEIVED;
+            return 1;
         }
     }
-    return STATUS_CRSF_NOT_RECEIVED;
+    return 0;
 }
 //========================================================================================

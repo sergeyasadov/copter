@@ -5,7 +5,7 @@
 #include "led/signal.h"
 #include "led/exception.h"
 
-#include "../status.h"
+#include "status.h"
 
 
 enum DebugLed_Types {
@@ -27,6 +27,25 @@ enum DebugLed_Types {
         case DL_TYPE_POWER: {__s0; return;}\
         case DL_TYPE_SIGNAL: {__s1; return;}\
         case DL_TYPE_EXCEPTION: {__s2; return;}\
+        default: return;\
+    }\
+} while(0)
+
+
+#define STATUS_SWITCH(__status, f_OK, f_ERR, f_EXC) do {\
+    switch(__status) {\
+        case STATUS_OK: {\
+            f_OK;\
+            return;\
+        }\
+        case STATUS_ERROR: {\
+            f_ERR;\
+            return;\
+        }\
+        case STATUS_EXCEPTION: {\
+            f_EXC;\
+            return;\
+        }\
         default: return;\
     }\
 } while(0)

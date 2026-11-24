@@ -1,3 +1,4 @@
+#if 0
 #ifndef STATUS_CODE_H
 #define STATUS_CODE_H
 
@@ -49,3 +50,5 @@ enum Status {
 } while(0)
 
 #endif //
+
+#endif // depr

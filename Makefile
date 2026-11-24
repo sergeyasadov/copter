@@ -76,8 +76,6 @@ COMPILERFLAGS += -Wnull-dereference
 COMPILERFLAGS += -Wreturn-local-addr
 COMPILERFLAGS += -Wshift-overflow=2
 COMPILERFLAGS += -Wshift-negative-value
-COMPILERFLAGS += -Wanalyzer-too-complex
-COMPILERFLAGS += -Wanalyzer-symbol-too-complex
 
 CXXFLAGS := -std=c++23
 CXXFLAGS += -fno-exceptions

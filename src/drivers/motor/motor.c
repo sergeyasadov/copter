@@ -9,17 +9,16 @@ void Motor_Init(struct Motor_TypeDef* m) {
     Motor_Reset(m);
 }
 
+
 void Motor_Set(const struct Motor_TypeDef* m) {
-    TIM1_CH1_Set(m->value[0]);
-    TIM1_CH2_Set(m->value[1]);
-    TIM1_CH3_Set(m->value[2]);
-    TIM1_CH4_Set(m->value[3]);
+    for(uint_fast8_t i = 4; i; i--) {
+        TIM1_CH_Set(i, m->value[i - 1]);
+    }
 }
 
-void Motor_Write(struct Motor_TypeDef* m, const uint8_t* __RESTRICT val) {
-    for(uint_fast8_t i = 0; i < 4; i++) {
-        m->value[i] = val[i];
-    }
+
+void Motor_Write(const uint_fast8_t n, const uint_fast8_t val) {
+    TIM1_CH_Set(n + 1, val);
 }
 
 

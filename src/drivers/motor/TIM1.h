@@ -1,6 +1,8 @@
 #ifndef TIMER1_H
 #define TIMER1_H
 
+#include "../../defines.h"
+
 #include <stm32f103xb.h>
 
 
@@ -85,28 +87,20 @@ __STATIC_INLINE void TIM1_Init(void) {
 }
 
 
-__STATIC_INLINE void TIM1_CH1_Set(uint_fast8_t v) {
-    if(v > 100) v = 100;
-    TIM1->CCR1 = (TIM1->ARR + 1) * v / 100;
+__STATIC_INLINE void TIM1_CH_Set(uint_fast8_t ch, uint_fast8_t val) {
+    if(val > 100)
+        val = 100;
+
+    switch(ch) {
+        case 1: { TIM1->CCR1 = (TIM1->ARR + 1) * val / 100; return; }
+        case 2: { TIM1->CCR2 = (TIM1->ARR + 1) * val / 100; return; }
+        case 3: { TIM1->CCR3 = (TIM1->ARR + 1) * val / 100; return; }
+        case 4: { TIM1->CCR4 = (TIM1->ARR + 1) * val / 100; return; }
+        default: return;
+    }
 }
 
 
-__STATIC_INLINE void TIM1_CH2_Set(uint_fast8_t v) {
-    if(v > 100) v = 100;
-    TIM1->CCR2 = (TIM1->ARR + 1) * v / 100;
-}
-
-
-__STATIC_INLINE void TIM1_CH3_Set(uint_fast8_t v) {
-    if(v > 100) v = 100;
-    TIM1->CCR3 = (TIM1->ARR + 1) * v / 100;
-}
-
-
-__STATIC_INLINE void TIM1_CH4_Set(uint_fast8_t v) {
-    if(v > 100) v = 100;
-    TIM1->CCR4 = (TIM1->ARR + 1) * v / 100;
-}
 
 
 #endif // TIMER1_H

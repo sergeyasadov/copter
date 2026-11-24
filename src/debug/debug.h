@@ -1,7 +1,7 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#include "../status.h"
+#include "status.h"
 
 
 void Debug_Init(void);

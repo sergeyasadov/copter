@@ -1,12 +1,10 @@
 #include "defines.h"
-#include "drivers/mpu9250/mpu9250.h"
-#include "drivers/mpu9250/SPI1.h"
 #include "drivers/motor/motor.h"
-#include "hardfault.h"
 #include "utils/clock_config.h"
 #include "debug/debug.h"
 #include "utils/delay.h"
 #include "status.h"
+#include "utils/timers/TON/TON.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -14,17 +12,15 @@
 
 __NO_RETURN
 int main(void) {
-    ClockConfig_72MHz_HSE_Init();
+    const int32_t resultClockConfig __unused = ClockConfig_72MHz_HSE_Init();
     DelayMs(1500);
 
     Debug_Init();
 
-    // MPU9250_Init();
-
     struct Motor_TypeDef motor;
     Motor_Init(&motor);
 
-    DebugLog(STATUS_OK, "Test");
+    DebugLog(STATUS_OK, "Start main loop");
 
     while (1) {
         for(uint8_t i = 0; i < 100; i++) {
@@ -36,23 +32,20 @@ int main(void) {
         }
 
         DelayMs(2000);
-        for(uint8_t i = 0; i < 100; i++) {
+        for(uint8_t i = 100; i; i--) {
             DebugLogf(STATUS_OK, "%i", i);
-            motor.value[0] = motor.value[1] = motor.value[2] = motor.value[3] = (uint8_t)(100u - i);
+            motor.value[0] = motor.value[1] = motor.value[2] = motor.value[3] = i;
             Motor_Set(&motor);
 
             DelayMs(10);
         }
         Motor_Reset(&motor);
         DelayMs(2000);
-
     }
 }
 
 
 
-//
-//
 // // volatile uint32_t* __RESTRICT const SOFTREBOOT = (volatile uint32_t*)(0x20004FFC);
 //
 //
