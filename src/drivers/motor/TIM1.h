@@ -3,8 +3,6 @@
 
 #include "../../defines.h"
 
-#include <stm32f103xb.h>
-
 
 __STATIC_INLINE void TIM1_GPIO_Channel1_Init(void) {
     GPIOA->CRH &= ~(GPIO_CRH_CNF8 | GPIO_CRH_MODE8);
