@@ -1,9 +1,9 @@
 #ifndef DEBUG_LOGGER_H
 #define DEBUG_LOGGER_H
 
-#include "../../status.h"
 
-#include "USART2.h"
+#include "log_send.h"
+
 
 #define DEBUG_LOG_COLOR_RED     "\x1B[31m"
 #define DEBUG_LOG_COLOR_GREEN   "\x1B[32m"
@@ -35,14 +35,6 @@
 #define DEBUG_LOG__EXC__PREFIX       DEBUG_LOG_TEMPLATE_EXC     DEBUG_LOG_TEMPLATE_MODULE
 #define DEBUG_LOG__ERR__PREFIX       DEBUG_LOG_TEMPLATE_ERR     DEBUG_LOG_TEMPLATE_MODULE
 
-#define USART_TX(__s) USART2_SendString(__s)
-
-#define DEBUG_PRINT_MODULE(__prefix, __module) do { \
-    USART_TX(__prefix);\
-    USART_TX(__module);\
-    USART_TX("\r\n");\
-} while(0)
-
 
 #define DEBUG_LOGGER_OK(__str) DEBUG_PRINT_MODULE(DEBUG_LOG__OK__PREFIX, __str)
 #define DEBUG_LOGGER_ERR(__str) DEBUG_PRINT_MODULE(DEBUG_LOG__ERR__PREFIX, __str)
@@ -50,17 +42,9 @@
 
 
 __STATIC_FORCEINLINE void DebugLogger_Init(void) {
-    USART2_Init();
+    DEBUG_PRINT_INIT();
     DEBUG_LOGGER_OK("USART2 Init");
 }
 
-__STATIC_FORCEINLINE void DebugLogger_Print(const enum Status status, const char* str) {
-    STATUS_SWITCH(
-        status,
-        DEBUG_PRINT_MODULE(DEBUG_LOG__OK__PREFIX, str),
-        DEBUG_PRINT_MODULE(DEBUG_LOG__ERR__PREFIX, str),
-        DEBUG_PRINT_MODULE(DEBUG_LOG__EXC__PREFIX, str)
-    );
-}
 
 #endif // DEBUG_LOGGER_H

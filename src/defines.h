@@ -1,7 +1,7 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-#include <stm32f1xx.h>
+#include <stm32f103xb.h>
 
 //========================================================================================
 #define ARR_SIZE(__arr) (sizeof(__arr) / sizeof(__arr[0]))
@@ -17,29 +17,6 @@
 //========================================================================================
 #define TICKS_TO_US(x)  (((x) - 992) * 5 / 8 + 1500)
 #define US_TO_TICKS(x)  (((x) - 1500) * 8 / 5 + 992)
-//========================================================================================
-// DEBUG LED
-#define DL0_POWER       3UL //PB3
-#define DL1_SIGNAL      4UL //PB4
-#define DL2_EXCEPTION   5UL //PB5
-//========================================================================================
-// ELRS [CRSF] (UART1) [Not sync]
-// Async 420'000 bits/s ~ 420'000 baud
-// 8 bits, no parity, 1 stop bit
-// Interrupt-driven
-#define ELRS_TX     6UL //PB6
-#define ELRS_RX     7UL //PB7
-//========================================================================================
-// MPU-9560/6500 (SPI1)
-#define MPU_SCK     5UL //PA5
-#define MPU_MOSI    7UL //PA7
-#define MPU_MISO    6UL //PA6
-#define MPU_NSS     4UL //PA4
-#define MPU_INT     0UL //PB0
-//========================================================================================
-// UART_DEBUG (UART2) [Not sync]
-#define UART_DEBUG_TX   2u //PA2
-#define UART_DEBUG_RX   3u //PA3
 //========================================================================================
 
 

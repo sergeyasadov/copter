@@ -4849,7 +4849,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "0"
 			(at 48.26 95.2499 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8356,7 +8356,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "0"
 			(at 80.01 95.2499 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9339,7 +9339,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "0"
 			(at 143.51 95.2499 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9851,7 +9851,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "0"
 			(at 111.76 95.2499 0)
 			(show_name no)
 			(do_not_autoplace no)

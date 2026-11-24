@@ -1,14 +1,15 @@
 #include "debug.h"
 #include "debug_led.h"
-#include "logger/logger.h"
+
+#include "logger/log_fmt.h"
+#include "status.h"
 
 #include <stdarg.h>
 #include <stdio.h>
-
 //========================================================================================
 #define DEBUG_BUF_LOGF_SIZE 128
 //========================================================================================
-void DebugInit(void) {
+void Debug_Init(void) {
     DebugLogger_Init();
     DEBUG_LOGGER_OK("Debug logger init");
 
@@ -29,8 +30,22 @@ void DebugInit(void) {
 }
 //----------------------------------------------------------------------------------------
 void DebugLog(const enum Status status, const char* str) {
-    DebugLogger_Print(status, str);
     DebugLed_SetStatus(status);
+    switch(status) {
+        case STATUS_OK: {
+            DEBUG_LOGGER_OK(str);
+            return;
+        }
+        case STATUS_ERROR: {
+            DEBUG_LOGGER_ERR(str);
+            return;
+        }
+        case STATUS_EXCEPTION: {
+            DEBUG_LOGGER_EXC(str);
+            return;
+        }
+        default: return;
+    }
 }
 //----------------------------------------------------------------------------------------
 void DebugLogf(const enum Status status, const char* fmt, ...) {

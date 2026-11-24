@@ -1,10 +1,7 @@
-#ifndef CRC8_H
-#define CRC8_H
+#include "CRSF.h"
 
 
-#include <stm32f1xx.h>
-
-static const uint8_t crc8tab[256] = {
+static const uint8_t p_csrf_crc8tab[256] = {
     0x00, 0xD5, 0x7F, 0xAA, 0xFE, 0x2B, 0x81, 0x54, 0x29, 0xFC, 0x56, 0x83, 0xD7, 0x02, 0xA8, 0x7D,
     0x52, 0x87, 0x2D, 0xF8, 0xAC, 0x79, 0xD3, 0x06, 0x7B, 0xAE, 0x04, 0xD1, 0x85, 0x50, 0xFA, 0x2F,
     0xA4, 0x71, 0xDB, 0x0E, 0x5A, 0x8F, 0x25, 0xF0, 0x8D, 0x58, 0xF2, 0x27, 0x73, 0xA6, 0x0C, 0xD9,
@@ -24,14 +21,32 @@ static const uint8_t crc8tab[256] = {
 };
 
 
-__STATIC_INLINE
-uint8_t crc8(const uint8_t* ptr, const uint_fast8_t len)
-{
+uint8_t CRSF_CRC8_Check(const uint8_t* ptr, const uint_fast8_t len) {
     uint8_t crc = 0;
     for(uint_fast8_t i = 0; i < len; i++) {
-        crc = crc8tab[crc ^ *ptr++];
+        crc = p_csrf_crc8tab[crc ^ *ptr++];
     }
     return crc;
 }
 
-#endif //
+
+void CRSF_DecodeChannels(const struct CRSF_TypeDef* crsf, uint16_t* channels) {
+    const uint8_t* payload = &crsf->data[CRSF_OFFSET__PAYLOAD];
+    channels[0]  = (payload[0]         | (payload[1]  << 8)) & 0x07FF;
+    channels[1]  = ((payload[1]  >> 3) | (payload[2]  << 5)) & 0x07FF;
+    channels[2]  = ((payload[2]  >> 6) | (payload[3]  << 2)  | (payload[4] << 10)) & 0x07FF;
+    channels[3]  = ((payload[4]  >> 1) | (payload[5]  << 7)) & 0x07FF;
+    channels[4]  = ((payload[5]  >> 4) | (payload[6]  << 4)) & 0x07FF;
+    channels[5]  = ((payload[6]  >> 7) | (payload[7]  << 1)  | (payload[8] << 9)) & 0x07FF;
+    channels[6]  = ((payload[8]  >> 2) | (payload[9]  << 6)) & 0x07FF;
+    channels[7]  = ((payload[9]  >> 5) | (payload[10] << 3)) & 0x07FF;
+
+    channels[8]  = (payload[11]        | (payload[12] << 8)) & 0x07FF;
+    channels[9]  = ((payload[12] >> 3) | (payload[13] << 5)) & 0x07FF;
+    channels[10] = ((payload[13] >> 6) | (payload[14] << 2)  | (payload[15] << 10)) & 0x07FF;
+    channels[11] = ((payload[15] >> 1) | (payload[16] << 7)) & 0x07FF;
+    channels[12] = ((payload[16] >> 4) | (payload[17] << 4)) & 0x07FF;
+    channels[13] = ((payload[17] >> 7) | (payload[18] << 1)  | (payload[19] << 9)) & 0x07FF;
+    channels[14] = ((payload[18] >> 2) | (payload[19] << 6)) & 0x07FF;
+    channels[15] = ((payload[19] >> 5) | (payload[20] << 3)) & 0x07FF;
+}
