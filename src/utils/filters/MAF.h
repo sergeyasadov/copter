@@ -1,8 +1,12 @@
 #ifndef MAFILTER_H
 #define MAFILTER_H
 
+#ifndef __STATIC_INLINE
+#define __STATIC_INLINE
+#endif
 
-#include "../../defines.h"
+#include <stdint.h>
+
 
 #define MAF_LENGTH 16
 #define MAF_DIV_SHIFT 4

@@ -6,7 +6,6 @@
 
 extern uint32_t SystemCoreClock;
 
-
 __STATIC_INLINE void ClockConfig_8MHz_HSI_Init(void) {
     RCC->CR |= RCC_CR_HSION;
     while(!(RCC->CR & RCC_CR_HSIRDY));

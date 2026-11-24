@@ -1,5 +1,4 @@
 #include "defines.h"
-#include "drivers/crsf/CRSF.h"
 #include "drivers/mpu9250/mpu9250.h"
 #include "drivers/mpu9250/SPI1.h"
 #include "drivers/motor/motor.h"
@@ -11,9 +10,9 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include <inttypes.h>
 
 
+__NO_RETURN
 int main(void) {
     ClockConfig_72MHz_HSE_Init();
     DelayMs(1500);
@@ -46,7 +45,7 @@ int main(void) {
         }
         Motor_Reset(&motor);
         DelayMs(2000);
-        // DebugLogf(STATUS_OK, "%X", MPU9250_ReadReg(0x75));
+
     }
 }
 
