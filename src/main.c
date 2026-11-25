@@ -1,5 +1,6 @@
 #include "defines.h"
 #include "drivers/motor/motor.h"
+#include "asserts.h"
 #include "utils/clock_config.h"
 #include "debug/debug.h"
 #include "utils/delay.h"
@@ -17,24 +18,32 @@ int main(void) {
 
     Debug_Init();
 
+    if(resultClockConfig < 0) {
+        DebugLog(STATUS_ERROR, "reusltClockConfig");
+        while(1) {
+            DelayMs(500);
+        }
+    }
+
     struct Motor_TypeDef motor;
     Motor_Init(&motor);
 
-    DebugLog(STATUS_OK, "Start main loop");
+    DebugLog(STATUS_EXCEPTION, "Start main loop");
 
     while (1) {
-        for(uint8_t i = 0; i < 100; i++) {
+        for(uint_fast8_t i = 0; i < 100; i++) {
             DebugLogf(STATUS_OK, "%i", i);
-            motor.value[0] = motor.value[1] = motor.value[2] = motor.value[3] = i;
+            motor.value[0] = motor.value[1] = motor.value[2] = motor.value[3] = (uint8_t)i;
             Motor_Set(&motor);
 
             DelayMs(10);
         }
 
         DelayMs(2000);
-        for(uint8_t i = 100; i; i--) {
+        for(uint_fast8_t i = 100; i; i--) {
             DebugLogf(STATUS_OK, "%i", i);
-            motor.value[0] = motor.value[1] = motor.value[2] = motor.value[3] = i;
+            motor.value[0] = motor.value[1] = motor.value[2] = motor.value[3] = (uint8_t)i;
+
             Motor_Set(&motor);
 
             DelayMs(10);

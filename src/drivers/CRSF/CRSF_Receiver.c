@@ -56,9 +56,7 @@ __STATIC_INLINE int p_CRSF_Receiver_Feed(struct CRSF_TypeDef* crsf, uint8_t b) {
 //========================================================================================
 void CRSF_Receiver_Init(struct CRSF_TypeDef* crsf) {
     RCC->AHBENR |= RCC_AHBENR_DMA1EN;
-    RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
-    RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
-    RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
+    RCC->APB2ENR |= RCC_APB2ENR_USART1EN | RCC_APB2ENR_IOPBEN | RCC_APB2ENR_AFIOEN;
 
     AFIO->MAPR |= AFIO_MAPR_USART1_REMAP;
 
@@ -69,11 +67,8 @@ void CRSF_Receiver_Init(struct CRSF_TypeDef* crsf) {
     DMA1_Channel5->CNDTR = CRSF_BUFFER_SIZE;
     DMA1_Channel5->CCR |= DMA_CCR_EN;
 
-    GPIOB->CRL &= ~((0xFUL << (4 * GPIO_ELRS_TX_Bit)));
-    GPIOB->CRL |= (0xBUL << (4 * GPIO_ELRS_TX_Bit));
-
-    GPIOB->CRL &= ~((0xFUL << (4 * GPIO_ELRS_RX_Bit)));
-    GPIOB->CRL |= (0x4UL << (4 * GPIO_ELRS_RX_Bit));
+    GPIOB->CRL = (GPIOB->CRL & ~((GPIO_CRL_CNF6 | GPIO_CRL_MODE6) | (GPIO_CRL_CNF7 | GPIO_CRL_MODE7)))
+                | (GPIO_CRL_CNF6_1 | GPIO_CRL_MODE6) | (GPIO_CRL_CNF7_0);
 
     USART1->BRR = 0xAB;
 

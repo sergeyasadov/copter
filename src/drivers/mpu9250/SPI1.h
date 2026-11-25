@@ -40,20 +40,20 @@ __STATIC_INLINE void SPI1_GPIO_Init(void) {
 
     SPI1_CS_Set(1);
 
-    GPIOA->CRL &= ~(  (0xFUL << (GPIO_MPU_NSS_Bit * 4))
-                    | (0xFUL << (GPIO_MPU_INT_Bit * 4))
-                    | (0xFUL << (GPIO_MPU_MISO_Bit * 4))
-                    | (0xFUL << (GPIO_MPU_MOSI_Bit * 4))
-                    | (0xFUL << (GPIO_MPU_SCK_Bit * 4))
-                    );
+    GPIOA->CRL = (GPIOA->CRL & ~(
+        (GPIO_CRL_MODE4 | GPIO_CRL_CNF4) |      // CS
+        (GPIO_CRL_MODE0 | GPIO_CRL_CNF0) |      // SCK
+        (GPIO_CRL_MODE6 | GPIO_CRL_CNF6) |      // MISO
+        (GPIO_CRL_MODE7 | GPIO_CRL_CNF7) |      // MOSI
+        (GPIO_CRL_MODE5 | GPIO_CRL_CNF5)        // INT
+    )) | (
+        (GPIO_CRL_MODE4) |                      // PA4 CS:   output push-pull
+        (GPIO_CRL_CNF5_1 | GPIO_CRL_MODE5) |    // PA5 SCK:  AF push-pull
+        (GPIO_CRL_CNF6_0) |                     // PA6 MISO: floating input
+        (GPIO_CRL_CNF7_1 | GPIO_CRL_MODE7) |    // PA7 MOSI: AF push-pull
+        (GPIO_CRL_CNF0_0)                       // PA0 INT:  floating input
+    );
 
-    GPIOA->CRL |= (0x3UL << (GPIO_MPU_NSS_Bit * 4))     // PA4 CS:   output push-pull
-               |  (0xBUL << (GPIO_MPU_SCK_Bit * 4))     // PA5 SCK:  AF push-pull
-               |  (0x4UL << (GPIO_MPU_MISO_Bit * 4))    // PA6 MISO: floating input
-               |  (0xBUL << (GPIO_MPU_MOSI_Bit * 4))    // PA7 MOSI: AF push-pull
-               |  (0x4UL << (GPIO_MPU_INT_Bit * 4));
-
-    // GPIOA->ODR |= (1UL << MPU_MISO);
     DebugLog(STATUS_OK, "SPI1 GPIO Init");
 }
 

@@ -6,11 +6,8 @@
 
 
 __STATIC_FORCEINLINE void DebugLed_Exception_Init(void) {
-    GPIOB->CRL &= ~(GPIO_CRL_CNF5 | GPIO_CRL_MODE5);
-    GPIOB->CRL |= GPIO_CRL_MODE5_0 | GPIO_CRL_MODE5_1;
-
-    // GPIOB->CRL &= ~(0xFUL << (4 * GPIO_DL2_EXCEPTION_Bit));
-    // GPIOB->CRL |= (0x2UL << (4 * GPIO_DL2_EXCEPTION_Bit));
+    GPIOB->CRL = (GPIOB->CRL & ~(GPIO_CRL_CNF5 | GPIO_CRL_MODE5))
+                | GPIO_CRL_MODE5_0 | GPIO_CRL_MODE5_1;
 }
 
 __STATIC_FORCEINLINE void DebugLed_Exception_On(void) {

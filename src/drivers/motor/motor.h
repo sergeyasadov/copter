@@ -24,4 +24,5 @@ void Motor_Write(const uint_fast8_t n, const uint_fast8_t val);
 
 void Motor_Reset(struct Motor_TypeDef*);
 
+
 #endif // MOTOR_H

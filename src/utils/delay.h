@@ -1,13 +1,9 @@
 #ifndef DELAY_MS
 #define DELAY_MS
 
-#include <stdint.h>
+#include "../defines.h"
 
-#include <stm32f1xx.h>
-
-#include "../systick.h"
-
-
+extern uint32_t SysTick_Get(void);
 
 __USED __STATIC_INLINE void DelayMs(uint32_t ms) {
     uint32_t start = SysTick_Get();
@@ -15,6 +11,7 @@ __USED __STATIC_INLINE void DelayMs(uint32_t ms) {
         __NOP();
     }
 }
+
 
 __attribute__((deprecated))
 __STATIC_INLINE void _DelayMs(uint32_t ms) {

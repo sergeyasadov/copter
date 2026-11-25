@@ -7,7 +7,7 @@
 #define STATIC_ASSERT(condition) _Static_assert((condition), #condition)
 #else
 #define STATIC_ASSERT(condition) \
-    static char __static_assert_##condition[(condition) ? (1) : (-1)]
+    extern char (*STATIC_ASSERTS_CHECK)[(condition) ? (1) : (-1)]
 
 #endif
 

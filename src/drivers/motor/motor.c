@@ -18,7 +18,7 @@ void Motor_Set(const struct Motor_TypeDef* m) {
 
 
 void Motor_Write(const uint_fast8_t n, const uint_fast8_t val) {
-    TIM1_CH_Set(n + 1, val);
+    TIM1_CH_Set(n, val);
 }
 
 

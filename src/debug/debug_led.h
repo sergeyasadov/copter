@@ -52,6 +52,7 @@ enum DebugLed_Types {
 
 
 __STATIC_FORCEINLINE void DebugLed_Init(const enum DebugLed_Types t) {
+    RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
     TYPE_SWITCH(t,
         DL_TYPE_POWER, DebugLed_Power_Init(),
         DL_TYPE_SIGNAL, DebugLed_Signal_Init(),
